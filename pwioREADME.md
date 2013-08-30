@@ -10,20 +10,18 @@ Exporting unstructured grids requires the serial enumeration (1 to N) of all uni
 <hr/>
 
 
-#Table Of Contents
+##Table Of Contents
 
 * [Namespace pwio](#namespace-pwio)
-    * [Library Reference pwio](#library-reference-pwio)
-    * [The Export Sequence](#the-export-sequence)
-    * [Example Usage](#example-usage)
-        * [Access Grid Points](#access-grid-points)
-        * [Access Cell Connectivity](#access-cell-connectivity)
-            * [Entity By Entity Access](#entity-by-entity-access)
-            * [Global Access](#global-access)
-* [Namespace pwio::utils](#namespace-pwioutils)
-    * [Library Reference pwio::utils](#library-reference-pwioutils)
-* [Namespace pwio::cell](#namespace-pwiocell)
-    * [Library Reference pwio::cell](#library-reference-pwiocell)
+* [Library Reference pwio](#library-reference-pwio)
+* [The Export Sequence](#the-export-sequence)
+* [Example Usage](#example-usage)
+    * [Access Grid Points](#access-grid-points)
+    * [Access Cell Connectivity](#access-cell-connectivity)
+        * [Entity By Entity Access](#entity-by-entity-access)
+        * [Global Access](#global-access)
+* [Library Reference pwio::utils](#library-reference-pwioutils)
+* [Library Reference pwio::cell](#library-reference-pwiocell)
 * [Disclaimer](#disclaimer)
 
 
@@ -41,8 +39,7 @@ For example:
 pwio::beginIO $ents
 ```
 
-
-## Library Reference pwio
+# Library Reference pwio
 
 ```Tcl
 pwio::beginIO { ents }
@@ -417,7 +414,7 @@ Returns non-zero if coord can be mapped to a specific grid level.
 </dl>
 
 
-## The Export Sequence
+# The Export Sequence
 
 Exporting a grid using `pwio` requires the same basic sequence:
 
@@ -429,12 +426,12 @@ Exporting a grid using `pwio` requires the same basic sequence:
 * Call `pwio::endIO` when finished.
 
 
-## Example Usage
+# Example Usage
 The following section show how to use `pwio` in conjuction with the standard Glyph calls.
 
 While many formats have a lot in common, each export format will have differing needs. The usage examples given below will not be needed by every exporter.
 
-### Access Grid Points
+## Access Grid Points
 
 ```Tcl
 pwio::beginIO $gridEntsToExport
@@ -461,9 +458,9 @@ for {set ii 1} {$ii <= $coordCnt} {incr ii} {
 pwio::endIO
 ```
 
-### Access Cell Connectivity
+## Access Cell Connectivity
 
-#### Entity By Entity Access
+### Entity By Entity Access
 
 Accessing interior and boundary cell connectivity is done on an entity by entity
 basis.
@@ -512,7 +509,7 @@ Things to consider:
    * The `pw::Domain` boundary cells can be enumerated in a manner similar to the volume cells example.
 
 
-#### Global Access
+### Global Access
 Like grid points, some export formats require the serial enumeration (1 to N) of
 all unique cells.
 
@@ -534,403 +531,22 @@ pwio::endIO
 <hr/>
 
 
-# Namespace pwio::utils
-A sub-collection of utility procs.
+# Library Reference pwio::utils
 
-All of the procs in this collection reside in the `pwio::utils` namespace.
-
-To call a proc in this collection, you must prefix the proc name with a `pwio::utils::` namespace specifier.
-
-For example:
-```Tcl
-pwio::utils::entBaseType $ent
-```
-
-
-## Library Reference pwio::utils
-
-```Tcl
-pwio::utils::assert { cond msg {exitVal -1} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::entBaseType { ent {subTypeVarName ""} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getBlockFaces { blk }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getBlockDomains { blk }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getFaceDomains { face }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getFaceEdges { face }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getEdgeConnectors { edge }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getFaceEdgeConnectors { face }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getPerimeterPointCount { ent }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getOwnedPointCount { ent }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::isBndryEnt { ent allEnts }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getNodeDbEnt { node dbEntVarName }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::entLockInterior { ent }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::entUnlockInterior { ent {clearAllLocks 0} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::entGetName { ent }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::entGetDimensions { ent }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::entIjkToIndex { ent ijk }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::ijkToIndexStructured { ijk ijkdim }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::indexToIjkStructured { ndx ijkdim }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::entIndexToIjk { ent entNdx1 }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::makeCoord { ent ijk }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::makeCoordFromIjkVals { ent i j k }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::makeCoordFromEntIndex { ent ndx }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>ndx</code></dt>
-  <dd>1-based and relative to <code>ent</code>'s pt space.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::sortEntsByType { ents }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::pointToString { pt }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::xyzEqual { xyz1 xyz2 {tol 1.0e-8} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::valEqual { val1 val2 {tol 1.0e-8} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::coordToPtString { coord }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::vcToString { vc }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::labelPt { ndx pt }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::printEntInfo { title ents {dim 0} {allEnts {}} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getSelection { selType selectedVarName errMsgVarName }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::utils::getSupportEnts { ents supEntsVarName {addEnts false}}
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
+[Documentation for pwio::utils](pwio-utils.md)
 
 
 <hr/>
 
 
-# Namespace pwio::cell
-A sub-collection of procs supporting the manipulation of cells.
+# Library Reference pwio::cell
 
-All of the procs in this collection reside in the `pwio::cell` namespace.
-
-To call a proc in this collection, you must prefix the proc name with a `pwio::cell::` namespace specifier.
-
-For example:
-```Tcl
-pwio::cell::getEdges $cell
-```
-
-
-## Library Reference pwio::cell
-
-```Tcl
-pwio::cell::getEdges { cell {minFirstOrder 0} {revVarName ""} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::cell::getFaces { cell {minFirstOrder 0} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
-<br/>
-```Tcl
-pwio::cell::getFaceEdges { face {minFirstOrder 0} {revVarName ""} }
-```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
-</dl>
-
+[Documentation for pwio::cell](pwio-cell.md)
 
 <hr/>
 
 
-## Disclaimer
+# Disclaimer
 Scripts are freely provided. They are not supported products of
 Pointwise, Inc. Some scripts have been written and contributed by third
 parties outside of Pointwise's control.
