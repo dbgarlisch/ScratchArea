@@ -1,9 +1,9 @@
+[Back to README.md](README.md)
+
 # glyph-pwio::utils
 
 A sub-collection of utility procs.
 
-
-<hr/>
 
 
 ##Table Of Contents
@@ -13,10 +13,8 @@ A sub-collection of utility procs.
 * [Disclaimer](#disclaimer)
 
 
-<hr/>
 
-
-# Namespace pwio::utils
+## Namespace pwio::utils
 
 All of the procs in this collection reside in the `pwio::utils` namespace.
 
@@ -28,7 +26,7 @@ pwio::utils::entBaseType $ent
 ```
 
 
-# Library Reference pwio::utils
+## Library Reference pwio::utils
 
 ```Tcl
 pwio::utils::assert { cond msg {exitVal -1} }
@@ -360,26 +358,8 @@ Proc description.
 </dl>
 
 
-<hr/>
 
-
-# Namespace pwio::cell
-A sub-collection of procs supporting the manipulation of cells.
-
-All of the procs in this collection reside in the `pwio::cell` namespace.
-
-To call a proc in this collection, you must prefix the proc name with a `pwio::cell::` namespace specifier.
-
-For example:
-```Tcl
-pwio::cell::getEdges $cell
-```
-
-
-<hr/>
-
-
-# Disclaimer
+### Disclaimer
 Scripts are freely provided. They are not supported products of
 Pointwise, Inc. Some scripts have been written and contributed by third
 parties outside of Pointwise's control.
