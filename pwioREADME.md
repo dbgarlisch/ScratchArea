@@ -1,12 +1,14 @@
 # glyph-pwio
+A Glyph library that helps with the export of 2D or 3D grid data to an unstructured format.
 
-A Glyph library that helps with the exporting of 2D or 3D unstructured grids.
+Exporting grid data to an unstructured format requires the serial enumeration (1 to N) of all unique grid points. However, because Pointwise grid entites share points, *non-trivial* data management is needed to efficiently serialize the grid points. The `pwio` library provides the required data management.
 
-Exporting unstructured grids requires the serial enumeration (1 to N) of all unique grid points. However, Pointwise `pw::Block` objects share grid points with the `pw::Domain` objects on their boundary. Likewise, `pw::Domain` objects share points with the `pw::Connector` objects on their boundary. Finally, `pw::Connector` objects share their end points with two `pw::Node` objects. Because of this sharing, additional data management is needed to properly enumerate the grid points. The `pwio` library provides the required data management.
+The `pwio` library supports both structured and unstructured Pointwise grid entities. However, structured entities are exported as unstructured quads and hexes.
 
 
 ## Limitations
-* Support for 2D boundaries needs work (see comments in the [Access Cell Connectivity / Entity By Entity](#entity-by-entity-access) section).
+* Support for 2D boundaries needs work
+    * For more information, see the [Access Cell Connectivity / Entity By Entity](#entity-by-entity-access) section.
 
 
 ##Table Of Contents
