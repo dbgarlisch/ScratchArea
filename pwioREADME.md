@@ -3,7 +3,6 @@ A Glyph library that helps with the exporting of 2D or 3D unstructured grids.
 
 Exporting unstructured grids requires the serial enumeration (1 to N) of all unique grid points. However, Pointwise `pw::Block` objects share grid points with the `pw::Domain` objects on their boundary. Likewise, `pw::Domain` objects share points with the `pw::Connector` objects on their boundary. Finally, `pw::Connector` objects share their end points with two `pw::Node` objects. Because of this sharing, additional data management is needed to properly enumerate the grid points. The `pwio` library provides the required data management.
 
-<a id="Limitations" />
 ### Limitations
 * Support for 2D boundaries needs work (see comments in the [Access Cell Connectivity (Entity By Entity)](#AccessCellConnectivityEntityByEntity) section).
 
@@ -13,24 +12,24 @@ Exporting unstructured grids requires the serial enumeration (1 to N) of all uni
 
 #Table Of Contents
 
-* [Namespace pwio](#NamespacePwio)
-  * [Library Reference pwio](#LibraryReferencePwio)
-  * [The Export Sequence](#TheExportSequence)
-  * [Example Usage](#ExampleUsage)
-    * [Access Grid Points](#AccessGridPoints)
-    * [Access Cell Connectivity (Entity By Entity)](#AccessCellConnectivityEntityByEntity)
-    * [Access Cell Connectivity (Globally)](#AccessCellConnectivityGlobally)
-* [Namespace pwio::utils](#NamespacePwioUtils)
-  * [Library Reference pwio::utils](#LibraryReferencePwioUtils)
-* [Namespace pwio::cell](#NamespacePwioCell)
-  * [Library Reference pwio::cell](#LibraryReferencePwioCell)
-* [Disclaimer](#Disclaimer)
+* [Namespace pwio](#namespace-pwio)
+    * [Library Reference pwio](#library-reference-pwio)
+    * [The Export Sequence](#the-export-sequence)
+    * [Example Usage](#example-usage)
+        * [Access Grid Points](#access-grid-points)
+        * [Access Cell Connectivity](#access-cell-connectivity)
+            * [Entity By Entity Access](#entity-by-entity-access)
+            * [Global Access](#global-access)
+* [Namespace pwio::utils](#namespace-pwioutils)
+    * [Library Reference pwio::utils](#library-reference-pwioutils)
+* [Namespace pwio::cell](#namespace-pwiocell)
+    * [Library Reference pwio::cell](#library-reference-pwiocell)
+* [Disclaimer](#disclaimer)
 
 
 <hr/>
 
 
-<a id="NamespacePwio" />
 # Namespace pwio
 
 All of the procs in this collection reside in the `pwio` namespace.
@@ -43,7 +42,6 @@ pwio::beginIO $ents
 ```
 
 
-<a id="LibraryReferencePwio" />
 ## Library Reference pwio
 
 ```Tcl
@@ -419,7 +417,6 @@ Returns non-zero if coord can be mapped to a specific grid level.
 </dl>
 
 
-<a id="TheExportSequence" />
 ## The Export Sequence
 
 Exporting a grid using `pwio` requires the same basic sequence:
@@ -432,13 +429,11 @@ Exporting a grid using `pwio` requires the same basic sequence:
 * Call `pwio::endIO` when finished.
 
 
-<a id="ExampleUsage" />
 ## Example Usage
 The following section show how to use `pwio` in conjuction with the standard Glyph calls.
 
 While many formats have a lot in common, each export format will have differing needs. The usage examples given below will not be needed by every exporter.
 
-<a id="AccessGridPoints" />
 ### Access Grid Points
 
 ```Tcl
@@ -466,8 +461,10 @@ for {set ii 1} {$ii <= $coordCnt} {incr ii} {
 pwio::endIO
 ```
 
-<a id="AccessCellConnectivityEntityByEntity" />
-### Access Cell Connectivity (Entity By Entity)
+### Access Cell Connectivity
+
+#### Entity By Entity Access
+
 Accessing interior and boundary cell connectivity is done on an entity by entity
 basis.
 
@@ -515,8 +512,7 @@ Things to consider:
    * The `pw::Domain` boundary cells can be enumerated in a manner similar to the volume cells example.
 
 
-<a id="AccessCellConnectivityGlobally" />
-### Access Cell Connectivity (Globally)
+#### Global Access
 Like grid points, some export formats require the serial enumeration (1 to N) of
 all unique cells.
 
@@ -538,7 +534,6 @@ pwio::endIO
 <hr/>
 
 
-<a id="NamespacePwioUtils" />
 # Namespace pwio::utils
 A sub-collection of utility procs.
 
@@ -552,7 +547,6 @@ pwio::utils::entBaseType $ent
 ```
 
 
-<a id="LibraryReferencePwioUtils" />
 ## Library Reference pwio::utils
 
 ```Tcl
@@ -888,7 +882,6 @@ Proc description.
 <hr/>
 
 
-<a id="NamespacePwioCell" />
 # Namespace pwio::cell
 A sub-collection of procs supporting the manipulation of cells.
 
@@ -902,7 +895,6 @@ pwio::cell::getEdges $cell
 ```
 
 
-<a id="LibraryReferencePwioCell" />
 ## Library Reference pwio::cell
 
 ```Tcl
@@ -938,7 +930,6 @@ Proc description.
 <hr/>
 
 
-<a id="Disclaimer" />
 ## Disclaimer
 Scripts are freely provided. They are not supported products of
 Pointwise, Inc. Some scripts have been written and contributed by third
