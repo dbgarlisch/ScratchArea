@@ -1,8 +1,7 @@
+| [README.md](README.md) | [pwio-utils.md](pwio-utils.md) |
+
 # glyph-pwio::cell
 A sub-collection of procs supporting the manipulation of cells.
-
-
-<hr/>
 
 
 ##Table Of Contents
@@ -12,10 +11,7 @@ A sub-collection of procs supporting the manipulation of cells.
 * [Disclaimer](#disclaimer)
 
 
-<hr/>
-
-
-# Namespace pwio::cell
+## Namespace pwio::cell
 
 All of the procs in this collection reside in the `pwio::cell` namespace.
 
@@ -27,7 +23,7 @@ pwio::cell::getEdges $cell
 ```
 
 
-# Library Reference pwio::cell
+## Library Reference pwio::cell
 
 ```Tcl
 pwio::cell::getEdges { cell {minFirstOrder 0} {revVarName ""} }
@@ -59,10 +55,8 @@ Proc description.
 </dl>
 
 
-<hr/>
 
-
-# Disclaimer
+### Disclaimer
 Scripts are freely provided. They are not supported products of
 Pointwise, Inc. Some scripts have been written and contributed by third
 parties outside of Pointwise's control.
