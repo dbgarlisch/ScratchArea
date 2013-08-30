@@ -1,13 +1,12 @@
 # glyph-pwio
+
 A Glyph library that helps with the exporting of 2D or 3D unstructured grids.
 
 Exporting unstructured grids requires the serial enumeration (1 to N) of all unique grid points. However, Pointwise `pw::Block` objects share grid points with the `pw::Domain` objects on their boundary. Likewise, `pw::Domain` objects share points with the `pw::Connector` objects on their boundary. Finally, `pw::Connector` objects share their end points with two `pw::Node` objects. Because of this sharing, additional data management is needed to properly enumerate the grid points. The `pwio` library provides the required data management.
 
-### Limitations
-* Support for 2D boundaries needs work (see comments in the [Access Cell Connectivity (Entity By Entity)](#AccessCellConnectivityEntityByEntity) section).
 
-
-<hr/>
+## Limitations
+* Support for 2D boundaries needs work (see comments in the [Access Cell Connectivity / Entity By Entity](#entity-by-entity-access) section).
 
 
 ##Table Of Contents
@@ -25,10 +24,7 @@ Exporting unstructured grids requires the serial enumeration (1 to N) of all uni
 * [Disclaimer](#disclaimer)
 
 
-<hr/>
-
-
-# Namespace pwio
+## Namespace pwio
 
 All of the procs in this collection reside in the `pwio` namespace.
 
@@ -39,7 +35,7 @@ For example:
 pwio::beginIO $ents
 ```
 
-# Library Reference pwio
+## Library Reference pwio
 
 ```Tcl
 pwio::beginIO { ents }
@@ -528,25 +524,17 @@ pwio::endIO
 ```
 
 
-<hr/>
-
-
-# Library Reference pwio::utils
+## Library Reference pwio::utils
 
 [Documentation for pwio::utils](pwio-utils.md)
 
 
-<hr/>
-
-
-# Library Reference pwio::cell
+## Library Reference pwio::cell
 
 [Documentation for pwio::cell](pwio-cell.md)
 
-<hr/>
 
-
-# Disclaimer
+### Disclaimer
 Scripts are freely provided. They are not supported products of
 Pointwise, Inc. Some scripts have been written and contributed by third
 parties outside of Pointwise's control.
