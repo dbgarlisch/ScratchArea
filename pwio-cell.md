@@ -1,7 +1,7 @@
 | [README.md](README.md) | [pwio-utils.md](pwio-utils.md) |
 
 # glyph-pwio::cell
-A sub-collection of procs supporting the manipulation of cells.
+A collection of procs supporting the manipulation of cells.
 
 
 ##Table Of Contents
@@ -39,7 +39,7 @@ These procs determine the `cell` and `face` dimensionality using `pwio::getCaeDi
 ```Tcl
 pwio::cell::getEdges { cell {minFirstOrder 0} {revVarName ""} }
 ```
-Returns cell's edges as a list. Each edge is itself a list (a list of lists).
+Returns `cell`'s edges as a list. Each edge is itself a list (a list of lists).
 <dl>
   <dt><code>cell</code></dt>
   <dd>The cell as a list of indices.</dd>
@@ -55,7 +55,7 @@ Returns cell's edges as a list. Each edge is itself a list (a list of lists).
 ```Tcl
 pwio::cell::getFaces { cell {minFirstOrder 0} }
 ```
-Returns cell's faces as a list. Each face is itself a list (a list of lists).
+Returns `cell`'s faces as a list. Each face is itself a list (a list of lists).
 <dl>
   <dt><code>cell</code></dt>
   <dd>The cell as a list of indices.</dd>
@@ -70,7 +70,7 @@ Returns cell's faces as a list. Each face is itself a list (a list of lists).
 ```Tcl
 pwio::cell::getFaceEdges { face {minFirstOrder 0} {revVarName ""} }
 ```
-Returns face's edges as a list. Each edge is itself a list (a list of lists).
+Returns `face`'s edges as a list. Each edge is itself a list (a list of lists).
 <dl>
   <dt><code>face</code></dt>
   <dd>The face as a list of indices.</dd>

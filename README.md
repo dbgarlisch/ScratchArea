@@ -61,7 +61,7 @@ pwio::endIO { {clearAllLocks 0} }
 Cleans up after an export. Must be called once at the end of an export.
 <dl>
   <dt><code>clearAllLocks</code></dt>
-  <dd>If 1, all locks will be released even if pwio did not make them.</dd>
+  <dd>If 1, all locks will be released even if `pwio` did not make them. Typically, the default of 0 should be used.</dd>
 </dl>
 
 
