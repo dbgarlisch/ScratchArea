@@ -24,6 +24,16 @@ pwio::cell::getEdges $cell
 
 The cell and face lists passed to these procs are required to be in [Pointwise cannonical order](README.md#pointwise-cannonical-order).
 
+These procs determine the `cell` and `face` dimensionality using `pwio::getCaeDim`.
+
+    * If `pwio::getCaeDim` is 2
+        * `cell` can be a quad (4 indices) or a tri (3 indices)
+        * `face` can only be a bar (2 indices)
+    * If `pwio::getCaeDim` is 3
+        * `cell` can be a hex (8 indices), prism/wedge (6 indices), pyramid (5 indices) or a tet (4 indices)
+        * `face` can be a quad (4 indices) or a tri (3 indices)
+
+
 ## Library Reference pwio::cell
 
 ```Tcl

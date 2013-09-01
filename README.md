@@ -471,10 +471,11 @@ Returns non-zero if coord can be mapped to a specific grid level.
 Exporting a grid using `pwio` requires the same basic sequence:
 
 * Call `pwio::beginIO` with a list of entites to export.
-  * A list of `pw::Domain` entites for a 2D export.
-  * A list of `pw::Block` entites for a 3D export.
+    * A list of `pw::Domain` entites for a 2D export.
+    * A list of `pw::Block` entites for a 3D export.
 * Access the grid data using `pwio` and Glyph procs.
-  * See the ![Example Usage](#ExampleUsage) section.
+    * See the [Example Usage](#ExampleUsage) section.
+    * See the [Pointwise Cannonical Order](#pointwise-cannonical-order) section.
 * Call `pwio::endIO` when finished.
 
 
