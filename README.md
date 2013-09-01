@@ -23,6 +23,7 @@ The `pwio` library supports both structured and unstructured Pointwise grid enti
         * [Global Access](#global-access)
 * [Library Reference pwio::utils](#library-reference-pwioutils)
 * [Library Reference pwio::cell](#library-reference-pwiocell)
+* [Pointwise Cannonical Order](#pointwise-cannonical-order)
 * [Disclaimer](#disclaimer)
 
 
@@ -588,6 +589,18 @@ pwio::endIO
 ## Library Reference pwio::cell
 
 [Documentation for pwio::cell](pwio-cell.md)
+
+
+## Pointwise Cannonical Order
+
+The cell and face lists returned by these procs arrange the indices in Pointwise cannonical order.
+
+The ordering is defined as follows:
+
+![Pointwise Cell and Face Cannonical Ordering][1]
+
+[1]: https://raw.github.com/dbgarlisch/ScratchArea/master/CellConnectivity.png  "Pointwise Cell and Face Cannonical Ordering"
+
 
 
 ### Disclaimer

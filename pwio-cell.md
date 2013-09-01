@@ -22,36 +22,53 @@ For example:
 pwio::cell::getEdges $cell
 ```
 
+The cell and face lists passed to these procs are required to be in [Pointwise cannonical order](README.md#pointwise-cannonical-order).
 
 ## Library Reference pwio::cell
 
 ```Tcl
 pwio::cell::getEdges { cell {minFirstOrder 0} {revVarName ""} }
 ```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
+Returns cell's edges as a list. Each edge is itself a list (a list of lists).
+<dl>
+  <dt><code>cell</code></dt>
+  <dd>The cell as a list of indices.</dd>
+  <dt><code>minFirstOrder</code></dt>
+  <dd>If 1, cell indices are rearranged with the minimum index first.</dd>
+  <dt><code>revVarName</code></dt>
+  <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
+	  corresponding edge was min first reversed.</dd>
 </dl>
+
 
 <br/>
 ```Tcl
 pwio::cell::getFaces { cell {minFirstOrder 0} }
 ```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
+Returns cell's faces as a list. Each face is itself a list (a list of lists).
+<dl>
+  <dt><code>cell</code></dt>
+  <dd>The cell as a list of indices.</dd>
+  <dt><code>minFirstOrder</code></dt>
+  <dd>If 1, the face indices are *rotated* such that the minimum index is
+      first. The relative ordering of the vertices is not changed (the face
+      normal is *not* flipped).</dd>
 </dl>
+
 
 <br/>
 ```Tcl
 pwio::cell::getFaceEdges { face {minFirstOrder 0} {revVarName ""} }
 ```
-Proc description.
-<dl style='padding-left: 1em; margin: 0 2em; border: 1px solid #eee;'>
-  <dt><code>arg</code></dt>
-  <dd>arg description.</dd>
+Returns face's edges as a list. Each edge is itself a list (a list of lists).
+<dl>
+  <dt><code>face</code></dt>
+  <dd>The face as a list of indices.</dd>
+  <dt><code>minFirstOrder</code></dt>
+  <dd>If 1, edge indices are rearranged with the minimum index first.</dd>
+  <dt><code>revVarName</code></dt>
+  <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
+	  corresponding edge was min first reversed.</dd>
 </dl>
 
 
