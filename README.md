@@ -480,7 +480,7 @@ Returns non-zero if `coord` can be mapped to a specific grid level.
 </dl>
 
 
-# The Export Sequence
+## The Export Sequence
 
 Exporting a grid using **pwio** requires the same basic sequence:
 

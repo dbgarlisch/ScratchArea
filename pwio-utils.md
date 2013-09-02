@@ -9,6 +9,8 @@ A collection of utility procs.
 
 * [Namespace pwio::utils](#namespace-pwioutils)
 * [Library Reference pwio::utils](#library-reference-pwioutils)
+* [Example Usage](#example-usage)
+    * [Example 1](#example-1)
 * [Disclaimer](#disclaimer)
 
 
@@ -511,33 +513,35 @@ if { [pwio::utils::getSelection $selType selectedEnts errMsg] } {
 } else {
     puts $errMsg
 }
-
-# Output (edited):
-# CAE Dimension : 3
-# Selection Type: Block
-# TEST
-# | Entity                         | Name            |     NumPts |  DbPts | Dim       | BaseType   | BorC  |
-# | ------------------------------ | --------------- | ---------- | ------ | --------- | ---------- | ----- |
-# | ::pw::BlockUnstructured_1      | blk-1           |         92 |        | 92 1 1    | Block      |       |
-# | ::pw::BlockUnstructured_2      | blk-2           |         57 |        | 57 1 1    | Block      |       |
-# | ::pw::BlockExtruded_1          | blk-3           |         48 |        | 12 1 4    | Block      |       |
-# | ::pw::DomainUnstructured_2     | dom-18          |         12 |        | 12 1      | Domain     | Bndry |
-# | ::pw::DomainUnstructured_3     | dom-29          |         14 |     14 | 14 1      | Domain     | Bndry |
-# | ::pw::DomainUnstructured_5     | dom-21          |         12 |        | 12 1      | Domain     | Bndry |
-# | ::pw::DomainUnstructured_6     | dom-19          |         12 |        | 12 1      | Domain     | Cnxn  |
-# | ::pw::DomainUnstructured_7     | dom-17          |         16 |        | 16 1      | Domain     | Bndry |
-#                                            ...SNIP...
-# | ::pw::Connector_18             | con-47          |          3 |        | 3         | Connector  |       |
-# | ::pw::Connector_9              | con-41          |          4 |        | 4         | Connector  |       |
-# | ::pw::Connector_19             | con-56          |          3 |      3 | 3         | Connector  |       |
-# | ::pw::Connector_24             | con-45          |          3 |        | 3         | Connector  |       |
-# | ::pw::Connector_25             | con-54          |          3 |      3 | 3         | Connector  |       |
-#                                            ...SNIP...
-# | ::pw::Node_10                  | Node_10         |          1 |      1 | 1         | Node       |       |
-# | ::pw::Node_11                  | Node_11         |          1 |        | 1         | Node       |       |
-# | ::pw::Node_2                   | Node_2          |          1 |        | 1         | Node       |       |
-# | ::pw::Node_3                   | Node_3          |          1 |        | 1         | Node       |       |
 ```
+
+**Output**
+
+    Output (edited):
+    CAE Dimension : 3
+    Selection Type: Block
+    TEST
+    | Entity                         | Name            |     NumPts |  DbPts | Dim       | BaseType   | BorC  |
+    | ------------------------------ | --------------- | ---------- | ------ | --------- | ---------- | ----- |
+    | ::pw::BlockUnstructured_1      | blk-1           |         92 |        | 92 1 1    | Block      |       |
+    | ::pw::BlockUnstructured_2      | blk-2           |         57 |        | 57 1 1    | Block      |       |
+    | ::pw::BlockExtruded_1          | blk-3           |         48 |        | 12 1 4    | Block      |       |
+    | ::pw::DomainUnstructured_2     | dom-18          |         12 |        | 12 1      | Domain     | Bndry |
+    | ::pw::DomainUnstructured_3     | dom-29          |         14 |     14 | 14 1      | Domain     | Bndry |
+    | ::pw::DomainUnstructured_5     | dom-21          |         12 |        | 12 1      | Domain     | Bndry |
+    | ::pw::DomainUnstructured_6     | dom-19          |         12 |        | 12 1      | Domain     | Cnxn  |
+    | ::pw::DomainUnstructured_7     | dom-17          |         16 |        | 16 1      | Domain     | Bndry |
+                                               ...SNIP...
+    | ::pw::Connector_18             | con-47          |          3 |        | 3         | Connector  |       |
+    | ::pw::Connector_9              | con-41          |          4 |        | 4         | Connector  |       |
+    | ::pw::Connector_19             | con-56          |          3 |      3 | 3         | Connector  |       |
+    | ::pw::Connector_24             | con-45          |          3 |        | 3         | Connector  |       |
+    | ::pw::Connector_25             | con-54          |          3 |      3 | 3         | Connector  |       |
+                                               ...SNIP...
+    | ::pw::Node_10                  | Node_10         |          1 |      1 | 1         | Node       |       |
+    | ::pw::Node_11                  | Node_11         |          1 |        | 1         | Node       |       |
+    | ::pw::Node_2                   | Node_2          |          1 |        | 1         | Node       |       |
+    | ::pw::Node_3                   | Node_3          |          1 |        | 1         | Node       |       |
 
 
 ### Disclaimer
