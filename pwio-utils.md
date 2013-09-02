@@ -440,6 +440,57 @@ Dumps a table of information about `ents`.
 
 `allEnts` is ignored if `dim` is 0.
 
+**Usage:**
+```Tcl
+set selType [pwio::getSelectType]
+set dim [pwio::getCaeDim]
+puts "CAE Dimension : $dim"
+puts "Selection Type: $selType"
+if { [getSelection $selType selectedEnts errMsg] } {
+    pwio::beginIO $selectedEnts
+    #pwio::printSummary
+    if { [getSupportEnts $selectedEnts selAndSupEnts true] } {
+        printEntInfo "TEST" $selAndSupEnts $dim $selectedEnts
+    } else {
+        puts "getSupportEnts failed"
+    }
+    pwio::endIO
+} else {
+    puts $errMsg
+}
+
+# Output:
+# CAE Dimension : 3
+# Selection Type: Block
+# TEST
+# | Entity                         | Name                           |     NumPts |  DbPts | Dim           | BaseType   | BorC  |
+# | ------------------------------ | ------------------------------ | ---------- | ------ | ------------- | ---------- | ----- |
+# | ::pw::BlockUnstructured_1      | blk-1                          |         92 |        | 92 1 1        | Block      |       |
+# | ::pw::BlockUnstructured_2      | blk-2                          |         57 |        | 57 1 1        | Block      |       |
+# | ::pw::BlockExtruded_1          | blk-3                          |         48 |        | 12 1 4        | Block      |       |
+# | ::pw::DomainStructured_10      | dom-43                         |         12 |        | 3 4           | Domain     | Bndry |
+# | ::pw::DomainUnstructured_1     | dom-20                         |         12 |        | 12 1          | Domain     | Bndry |
+# | ::pw::DomainUnstructured_2     | dom-18                         |         12 |        | 12 1          | Domain     | Bndry |
+# | ::pw::DomainUnstructured_3     | dom-29                         |         14 |     14 | 14 1          | Domain     | Bndry |
+# | ::pw::DomainUnstructured_4     | dom-23                         |         14 |        | 14 1          | Domain     | Bndry |
+# | ::pw::DomainUnstructured_5     | dom-21                         |         12 |        | 12 1          | Domain     | Bndry |
+# | ::pw::DomainUnstructured_6     | dom-19                         |         12 |        | 12 1          | Domain     | Cnxn  |
+# | ::pw::DomainUnstructured_7     | dom-17                         |         16 |        | 16 1          | Domain     | Bndry |
+# .......................................................SNIP...................................................................
+# | ::pw::Connector_18             | con-47                         |          3 |        | 3             | Connector  |       |
+# | ::pw::Connector_9              | con-41                         |          4 |        | 4             | Connector  |       |
+# | ::pw::Connector_19             | con-56                         |          3 |      3 | 3             | Connector  |       |
+# | ::pw::Connector_20             | con-37                         |          3 |        | 3             | Connector  |       |
+# | ::pw::Connector_24             | con-45                         |          3 |        | 3             | Connector  |       |
+# | ::pw::Connector_25             | con-54                         |          3 |      3 | 3             | Connector  |       |
+# .......................................................SNIP...................................................................
+# | ::pw::Node_10                  | Node_10                        |          1 |      1 | 1             | Node       |       |
+# | ::pw::Node_11                  | Node_11                        |          1 |        | 1             | Node       |       |
+# | ::pw::Node_1                   | Node_1                         |          1 |        | 1             | Node       |       |
+# | ::pw::Node_2                   | Node_2                         |          1 |        | 1             | Node       |       |
+# | ::pw::Node_3                   | Node_3                         |          1 |        | 1             | Node       |       |
+```
+
 
 <br/>
 ```Tcl
