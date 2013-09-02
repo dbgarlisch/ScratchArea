@@ -14,7 +14,7 @@ A collection of utility procs.
 
 ## Namespace pwio::utils
 
-All of the procs in this collection reside in the `pwio::utils` namespace.
+All of the procs in this collection reside in the **pwio::utils** namespace.
 
 To call a proc in this collection, you must prefix the proc name with a **pwio::utils::** namespace specifier.
 
@@ -36,7 +36,7 @@ Asserts that `cond` is true. If false, `msg` is displayed and the script is term
   <dt><code>msg</code></dt>
   <dd>The message to display if <code>cond</code> evaluates to false.</dd>
   <dt><code>exitVal</code></dt>
-  <dd>The fail exit value. If 0, the script will **not** exit and execution will continue.</dd>
+  <dd>The fail exit value. If 0, the script will <b>not</b> exit and execution will continue.</dd>
 </dl>
 
 **Usage:**
@@ -66,8 +66,11 @@ Returns `ent`'s base grid entity type.
 Base grid types are one of **Node**, **Connector**, **Domain**, or **Block**.
 
 For blocks, the subtype will be one of **Structured**, **Unstructured** or **Extruded**.
+
 For domains, the subtype will be one of **Structured** or **Unstructured**.
+
 For connectors, the subtype is set to **Connector**.
+
 For nodes, the subtype is set to **Node**.
 
 
@@ -75,7 +78,7 @@ For nodes, the subtype is set to **Node**.
 ```Tcl
 pwio::utils::getBlockFaces { blk }
 ```
-Returns `blk`'s faces as a list of **pw::Face** entities.
+Returns `blk`'s faces as a list of [pw::Face][pwFace] entities.
 <dl>
   <dt><code>blk</code></dt>
   <dd>A block entity.</dd>
@@ -86,7 +89,7 @@ Returns `blk`'s faces as a list of **pw::Face** entities.
 ```Tcl
 pwio::utils::getBlockDomains { blk }
 ```
-Returns `blk`'s domains as a list of **pw::Domain** entities. It is possible for a domain to appear in the list more than once.
+Returns `blk`'s domains as a list of [pw::Domain][pwDom] entities. It is possible for a domain to appear in the list more than once.
 <dl>
   <dt><code>blk</code></dt>
   <dd>A block entity.</dd>
@@ -97,7 +100,7 @@ Returns `blk`'s domains as a list of **pw::Domain** entities. It is possible for
 ```Tcl
 pwio::utils::getFaceDomains { face }
 ```
-Returns `face`'s domains as a list of **pw::Domain** entities. It is possible for a domain to appear in the list more than once.
+Returns `face`'s domains as a list of [pw::Domain][pwDom] entities. It is possible for a domain to appear in the list more than once.
 <dl>
   <dt><code>face</code></dt>
   <dd>A face entity.</dd>
@@ -108,7 +111,7 @@ Returns `face`'s domains as a list of **pw::Domain** entities. It is possible fo
 ```Tcl
 pwio::utils::getFaceEdges { face }
 ```
-Returns `face`'s edges as a list of **pw::Edge** entities. The first edge is `face`'s outer loop. Any additional edges are inner loops (holes).
+Returns `face`'s edges as a list of [pw::Edge][pwEdge] entities. The first edge is `face`'s outer loop. Any additional edges are inner loops (holes).
 <dl>
   <dt><code>face</code></dt>
   <dd>A face entity.</dd>
@@ -119,7 +122,7 @@ Returns `face`'s edges as a list of **pw::Edge** entities. The first edge is `fa
 ```Tcl
 pwio::utils::getEdgeConnectors { edge }
 ```
-Returns `edge`'s connectors as a list of **pw::Connector** entities. It is possible for a connector to appear in the list more than once.
+Returns `edge`'s connectors as a list of [pw::Connector][pwCon] entities. It is possible for a connector to appear in the list more than once.
 <dl>
   <dt><code>edge</code></dt>
   <dd>An edge entity.</dd>
@@ -130,7 +133,7 @@ Returns `edge`'s connectors as a list of **pw::Connector** entities. It is possi
 ```Tcl
 pwio::utils::getFaceEdgeConnectors { face }
 ```
-Returns `face`'s connectors as a list of **pw::Connector** entities. It is possible for a connector to appear in the list more than once.
+Returns `face`'s connectors as a list of [pw::Connector][pwCon] entities. It is possible for a connector to appear in the list more than once.
 <dl>
   <dt><code>face</code></dt>
   <dd>A face entity.</dd>
@@ -141,22 +144,27 @@ Returns `face`'s connectors as a list of **pw::Connector** entities. It is possi
 ```Tcl
 pwio::utils::getPerimeterPointCount { ent }
 ```
-Returns the number of grid points on `ent`'s outer perimeter. This count includes any holes or voids. Nodes will always return 0. Connectors will always return 2.
+Returns the number of [grid points][gridPoint] on `ent`'s outer perimeter. This count includes any holes or voids. Nodes will always return 0. Connectors will always return 2.
 <dl>
   <dt><code>ent</code></dt>
-  <dd>A <b>pw::Node</b>, <b>pw::Connector</b>, <b>pw::Domain</b>, <b>pw::Face</b> or <b>pw::Block</b> entity.</dd>
+  <dd>A grid entity.</dd>
 </dl>
+
+`ent` must be a [pw::Node][pwNode], [pw::Connector][pwCon], [pw::Domain][pwDom], [pw::Face][pwFace] or [pw::Block][pwBlk] entity.
 
 
 <br/>
 ```Tcl
 pwio::utils::getOwnedPointCount { ent }
 ```
-Returns the number of grid points on `ent`'s interior (non-perimeter points). Nodes will always return 1.
+Returns the number of [grid points][gridPoint] on `ent`'s interior (non-perimeter points). Nodes will always return 1.
 <dl>
   <dt><code>ent</code></dt>
-  <dd>A <b>pw::Node</b>, <b>pw::Connector</b>, <b>pw::Domain</b>, <b>pw::Face</b> or <b>pw::Block</b> entity.</dd>
+  <dd>A grid entity.</dd>
 </dl>
+
+`ent` must be a [pw::Node][pwNode], [pw::Connector][pwCon], [pw::Domain][pwDom], [pw::Face][pwFace] or [pw::Block][pwBlk] entity.
+
 
 <br/>
 ```Tcl
@@ -165,12 +173,12 @@ pwio::utils::isBndryEnt { ent allEnts }
 Returns true if `ent` lies on the boundary of `allEnts`.
 <dl>
   <dt><code>ent</code></dt>
-  <dd>A <b>pw::Connector</b> or <b>pw::Domain</b> entity.</dd>
+  <dd>A grid entity.</dd>
   <dt><code>allEnts</code></dt>
   <dd>A list of grid entites.</dd>
 </dl>
 
-An error will occur if `ent` is anything other than a **pw::Connector** entity in 2D and anything other than a **pw::Domain** entity in 3D.
+An error will occur if `ent` is anything other than a [pw::Connector][pwCon] entity in 2D and anything other than a [pw::Domain][pwDom] entity in 3D.
 
 
 <br/>
@@ -180,17 +188,19 @@ pwio::utils::getNodeDbEnt { node dbEntVarName }
 Returns true if `node` is constrained to a DB entity.
 <dl>
   <dt><code>node</code></dt>
-  <dd>A <b>pw::Node</b> entity.</dd>
+  <dd>A node entity.</dd>
   <dt><code>dbEntVarName</code></dt>
   <dd>Required. If constrained, the DB entity is stored in this variable.</dd>
 </dl>
+
+`node` must be a [pw::Node][pwNode] entity.
 
 
 <br/>
 ```Tcl
 pwio::utils::entLockInterior { ent }
 ```
-Locks `ent`'s grid points.
+Locks `ent`'s [grid points][gridPoint].
 <dl>
   <dt><code>ent</code></dt>
   <dd>A grid entity.</dd>
@@ -203,7 +213,7 @@ A corresponding call to *pwio::utils::entUnlockInterior** must be made when fini
 ```Tcl
 pwio::utils::entUnlockInterior { ent {clearAllLocks 0} }
 ```
-Unlocks `ent`'s grid points.
+Unlocks `ent`'s [grid points][gridPoint].
 <dl>
   <dt><code>ent</code></dt>
   <dd>A grid entity previously locked with a call to <b>pwio::utils::entLockInterior</b>.</dd>
@@ -335,10 +345,12 @@ pwio::utils::pointToString { pt }
 Returns a string representation of `pt`.
 <dl>
   <dt><code>pt</code></dt>
-  <dd>A point as an **{x y z}** or **{u v dbEnt}** list.</dd>
+  <dd>A grid point list.</dd>
 </dl>
 
-The resulting string will be one of "*{x y z}*" or "*{u v dbEnt}*".
+`pt` is a [grid point][gridPoint].
+
+The resulting string will be one of *"{x y z}"* or *"{u v dbEnt}"*.
 
 
 <br/>
@@ -348,9 +360,9 @@ pwio::utils::xyzEqual { xyz1 xyz2 {tol 1e-8} }
 Returns true if two xyz points are equal within the given tolerance.
 <dl>
   <dt><code>xyz1</code></dt>
-  <dd>First point as an **{x y z}** list.</dd>
+  <dd>First point as an <b>{x y z}</b> list.</dd>
   <dt><code>xyz2</code></dt>
-  <dd>Second point as an **{x y z}** list.</dd>
+  <dd>Second point as an <b>{x y z}</b> list.</dd>
   <dt><code>tol</code></dt>
   <dd>The optional comparison tolerance.</dd>
 </dl>
@@ -392,14 +404,14 @@ Returns a string representation of a [volume condition][volCond].
   <dd>The volume condition.</dd>
 </dl>
 
-The resulting string format will be "*vcName vcId vcPhysicalType*"
+The resulting string format will be *"vcName vcId vcPhysicalType"*
 
 
 <br/>
 ```Tcl
 pwio::utils::labelPt { ndx pt }
 ```
-Returns a [**pw::Note**][pwNote] entity positioned at `pt`.
+Returns a [pw::Note][pwNote] entity positioned at `pt`.
 <dl>
   <dt><code>ndx</code></dt>
   <dd>The note text value.</dd>
@@ -489,8 +501,18 @@ POINTWISE.
 
 [gridCoord]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GgGlyph-cxx.html#coord "What is a grid coord?"
 
+[gridPoint]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GgGlyph-cxx.html#point "What is a grid point?"
+
 [volCond]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphVolumeCondition-cxx.html "What is a volume condition?"
 
 [bndryCond]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphBoundaryCondition-cxx.html "What is a boundary condition?"
 
 [pwNote]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphNote-cxx.html "What is a pw::Note?"
+
+[pwBlk]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphBlock-cxx.html "What is a pw::Block?"
+
+[pwDom]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphDomain-cxx.html "What is a pw::Domain?"
+
+[pwCon]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphConnector-cxx.html "What is a pw::Connector?"
+
+[pwNode]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphNode-cxx.html "What is a pw::Node?"
