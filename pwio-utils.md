@@ -75,6 +75,34 @@ For connectors, the subtype is set to **Connector**.
 
 For nodes, the subtype is set to **Node**.
 
+**Usage:**
+```Tcl
+foreach selType {Block Domain Connector} {
+    if { ![pwio::utils::getSelection $selType selectedEnts errMsg] } {
+        puts $errMsg
+        continue;
+    }
+    puts "$selType selection:"
+    foreach ent $selectedEnts {
+        set baseType [pwio::utils::entBaseType $ent subType]
+        puts "  [$ent getName]($ent) baseType='$baseType' subType='$subType'"
+    }
+}
+```
+
+**Output:**
+```
+Block selection:
+  blk-3(::pw::BlockExtruded_1) baseType='Block' subType='Extruded'
+  blk-1(::pw::BlockUnstructured_1) baseType='Block' subType='Unstructured'
+Domain selection:
+  dom-18(::pw::DomainUnstructured_2) baseType='Domain' subType='Unstructured'
+  dom-26(::pw::DomainStructured_6) baseType='Domain' subType='Structured'
+Connector selection:
+  con-55(::pw::Connector_22) baseType='Connector' subType='Connector'
+  con-37(::pw::Connector_20) baseType='Connector' subType='Connector'
+```
+
 
 <br/>
 ```Tcl
@@ -496,26 +524,22 @@ Shared support entities are only included in `supEntsVarName` once.
 ### Example 1
 
 ```Tcl
-set selType [pwio::getSelectType]
 set dim [pwio::getCaeDim]
-
 puts "CAE Dimension : $dim"
+
+set selType [pwio::getSelectType]
 puts "Selection Type: $selType"
 
-if { [pwio::utils::getSelection $selType selectedEnts errMsg] } {
-    pwio::beginIO $selectedEnts
-    if { [pwio::utils::getSupportEnts $selectedEnts selAndSupEnts true] } {
-        pwio::utils::printEntInfo "TEST" $selAndSupEnts $dim $selectedEnts
-    } else {
-        puts "pwio::utils::getSupportEnts failed"
-    }
-    pwio::endIO
-} else {
+if { ![pwio::utils::getSelection $selType selectedEnts errMsg] } {
     puts $errMsg
+} elseif { ![pwio::utils::getSupportEnts $selectedEnts selAndSupEnts true] } {
+    puts "pwio::utils::getSupportEnts failed"
+} else {
+    pwio::utils::printEntInfo "TEST" $selAndSupEnts $dim $selectedEnts
 }
 ```
 
-**Output (edited)**
+*Output (edited):*
 
     CAE Dimension : 3
     Selection Type: Block
