@@ -16,7 +16,7 @@ A collection of utility procs.
 
 All of the procs in this collection reside in the `pwio::utils` namespace.
 
-To call a proc in this collection, you must prefix the proc name with a `pwio::utils::` namespace specifier.
+To call a proc in this collection, you must prefix the proc name with a **pwio::utils::** namespace specifier.
 
 For example:
 ```Tcl
@@ -50,11 +50,12 @@ assert "$ndx >= 1 && $ndx < [$ent getPointCount]" "Bad Index $ndx for '[$ent get
 # message      : Bad Index 5 for 'blk-1'
 ```
 
+
 <br/>
 ```Tcl
 pwio::utils::entBaseType { ent {subTypeVarName ""} }
 ```
-Returns `ent`'s base grid entity type. One of `Node`, `Connector`, `Domain`, or `Block`.
+Returns `ent`'s base grid entity type.
 <dl>
   <dt><code>ent</code></dt>
   <dd>A grid entity.</dd>
@@ -62,17 +63,19 @@ Returns `ent`'s base grid entity type. One of `Node`, `Connector`, `Domain`, or 
   <dd>If provided, <code>ent</code>'s subtype is stored in this variable.</dd>
 </dl>
 
-For blocks, the subtype will be one of `Structured`, `Unstructured` or `Extruded`.
-For domains, the subtype will be one of `Structured` or `Unstructured`.
-For connectors, the subtype is set to `Connector`.
-For nodes, the subtype is set to `Node`.
+Base grid types are one of **Node**, **Connector**, **Domain**, or **Block**.
+
+For blocks, the subtype will be one of **Structured**, **Unstructured** or **Extruded**.
+For domains, the subtype will be one of **Structured** or **Unstructured**.
+For connectors, the subtype is set to **Connector**.
+For nodes, the subtype is set to **Node**.
 
 
 <br/>
 ```Tcl
 pwio::utils::getBlockFaces { blk }
 ```
-Returns `blk`'s faces as a list of `pw::FaceUnstructured` and/or `pw::FaceStructured` entities.
+Returns `blk`'s faces as a list of **pw::Face** entities.
 <dl>
   <dt><code>blk</code></dt>
   <dd>A block entity.</dd>
@@ -83,7 +86,7 @@ Returns `blk`'s faces as a list of `pw::FaceUnstructured` and/or `pw::FaceStruct
 ```Tcl
 pwio::utils::getBlockDomains { blk }
 ```
-Returns `blk`'s domains as a list of `pw::DomainUnstructured` and/or `pw::DomainStructured` entities. It is possible for a domain to appear in the list more than once.
+Returns `blk`'s domains as a list of **pw::Domain** entities. It is possible for a domain to appear in the list more than once.
 <dl>
   <dt><code>blk</code></dt>
   <dd>A block entity.</dd>
@@ -94,7 +97,7 @@ Returns `blk`'s domains as a list of `pw::DomainUnstructured` and/or `pw::Domain
 ```Tcl
 pwio::utils::getFaceDomains { face }
 ```
-Returns `face`'s domains as a list of `pw::DomainUnstructured` and/or `pw::DomainStructured` entities. It is possible for a domain to appear in the list more than once.
+Returns `face`'s domains as a list of **pw::Domain** entities. It is possible for a domain to appear in the list more than once.
 <dl>
   <dt><code>face</code></dt>
   <dd>A face entity.</dd>
@@ -105,7 +108,7 @@ Returns `face`'s domains as a list of `pw::DomainUnstructured` and/or `pw::Domai
 ```Tcl
 pwio::utils::getFaceEdges { face }
 ```
-Returns `face`'s edges as a list of `pw::Edge` entities. The first edge is `face`'s outer loop. Any additional edges are inner loops (holes).
+Returns `face`'s edges as a list of **pw::Edge** entities. The first edge is `face`'s outer loop. Any additional edges are inner loops (holes).
 <dl>
   <dt><code>face</code></dt>
   <dd>A face entity.</dd>
@@ -116,7 +119,7 @@ Returns `face`'s edges as a list of `pw::Edge` entities. The first edge is `face
 ```Tcl
 pwio::utils::getEdgeConnectors { edge }
 ```
-Returns `edge`'s connectors as a list of `pw::Connector` entities. It is possible for a connector to appear in the list more than once.
+Returns `edge`'s connectors as a list of **pw::Connector** entities. It is possible for a connector to appear in the list more than once.
 <dl>
   <dt><code>edge</code></dt>
   <dd>An edge entity.</dd>
@@ -127,7 +130,7 @@ Returns `edge`'s connectors as a list of `pw::Connector` entities. It is possibl
 ```Tcl
 pwio::utils::getFaceEdgeConnectors { face }
 ```
-Returns `face`'s connectors as a list of `pw::Connector` entities. It is possible for a connector to appear in the list more than once.
+Returns `face`'s connectors as a list of **pw::Connector** entities. It is possible for a connector to appear in the list more than once.
 <dl>
   <dt><code>face</code></dt>
   <dd>A face entity.</dd>
@@ -141,7 +144,7 @@ pwio::utils::getPerimeterPointCount { ent }
 Returns the number of grid points on `ent`'s outer perimeter. This count includes any holes or voids. Nodes will always return 0. Connectors will always return 2.
 <dl>
   <dt><code>ent</code></dt>
-  <dd>A Node, Connector, Domain, Face or Block entity.</dd>
+  <dd>A <b>pw::Node</b>, <b>pw::Connector</b>, <b>pw::Domain</b>, <b>pw::Face</b> or <b>pw::Block</b> entity.</dd>
 </dl>
 
 
@@ -152,7 +155,7 @@ pwio::utils::getOwnedPointCount { ent }
 Returns the number of grid points on `ent`'s interior (non-perimeter points). Nodes will always return 1.
 <dl>
   <dt><code>ent</code></dt>
-  <dd>A Node, Connector, Domain, Face or Block entity.</dd>
+  <dd>A <b>pw::Node</b>, <b>pw::Connector</b>, <b>pw::Domain</b>, <b>pw::Face</b> or <b>pw::Block</b> entity.</dd>
 </dl>
 
 <br/>
@@ -162,22 +165,22 @@ pwio::utils::isBndryEnt { ent allEnts }
 Returns true if `ent` lies on the boundary of `allEnts`.
 <dl>
   <dt><code>ent</code></dt>
-  <dd>A Connector or Domain entity.</dd>
+  <dd>A <b>pw::Connector</b> or <b>pw::Domain</b> entity.</dd>
   <dt><code>allEnts</code></dt>
   <dd>A list of grid entites.</dd>
 </dl>
 
-An error will occur if `ent` is anything other than a `pw::Connector` entity in 2D and anything other than a `pw::Domain` entity in 3D.
+An error will occur if `ent` is anything other than a **pw::Connector** entity in 2D and anything other than a **pw::Domain** entity in 3D.
 
 
 <br/>
 ```Tcl
 pwio::utils::getNodeDbEnt { node dbEntVarName }
 ```
-Returns true if `node` is DB constrained.
+Returns true if `node` is constrained to a DB entity.
 <dl>
   <dt><code>node</code></dt>
-  <dd>A <code>pw::Node</code> entity.</dd>
+  <dd>A <b>pw::Node</b> entity.</dd>
   <dt><code>dbEntVarName</code></dt>
   <dd>Required. If constrained, the DB entity is stored in this variable.</dd>
 </dl>
@@ -193,7 +196,7 @@ Locks `ent`'s grid points.
   <dd>A grid entity.</dd>
 </dl>
 
-A corresponding call to `pwio::utils::entUnlockInterior` must be made when finished.
+A corresponding call to *pwio::utils::entUnlockInterior** must be made when finished.
 
 
 <br/>
@@ -203,12 +206,12 @@ pwio::utils::entUnlockInterior { ent {clearAllLocks 0} }
 Unlocks `ent`'s grid points.
 <dl>
   <dt><code>ent</code></dt>
-  <dd>A grid entity previously locked with a call to `pwio::utils::entLockInterior`.</dd>
+  <dd>A grid entity previously locked with a call to <b>pwio::utils::entLockInterior</b>.</dd>
   <dt><code>clearAllLocks</code></dt>
   <dd>If 1, all active locks on <code>ent</code> will be released.</dd>
 </dl>
 
-Typically, `clearAllLocks` should be 0. You should explicitly lock and unlock entities. A logic error has occurred if an entity remains locked at script termination.
+Typically, `clearAllLocks` should be 0. You should explicitly lock and unlock entities. There is a logic error if an entity remains locked at script termination.
 
 
 <br/>
@@ -223,9 +226,9 @@ Returns the linear index corresponding to `ijk` within the given `ijkdim` extent
   <dd>A list defining the full structured extents used for conversion.</dd>
 </dl>
 
-This proc does **not** check if `ijk` lies within the given `ijkdim` extents.
-If `ijk` is invalid, the returned index is invalid.
-The reverse mapping is done with `pwio::utils::indexToIjkStructured`.
+This proc does **not** check if `ijk` lies within the given `ijkdim` extents. If `ijk` is invalid, the returned index is invalid.
+
+The reverse mapping is done with **pwio::utils::indexToIjkStructured**.
 
 
 <br/>
@@ -240,7 +243,7 @@ Returns the ijk index corresponding to `ndx` within the given `ijkdim` extents.
   <dd>A list defining the full structured extents used for conversion.</dd>
 </dl>
 
-The reverse mapping is done with `pwio::utils::ijkToIndexStructured`.
+The reverse mapping is done with **pwio::utils::ijkToIndexStructured**.
 
 
 <br/>
@@ -255,7 +258,7 @@ Returns `ent`'s linear index that corresponds to `ijk`.
   <dd>The ijk index list to convert.</dd>
 </dl>
 
-The reverse mapping is done with `pwio::utils::entIndexToIjk`.
+The reverse mapping is done with **pwio::utils::entIndexToIjk**.
 
 
 <br/>
@@ -270,7 +273,7 @@ Returns `ent`'s ijk index that corresponds to `ndx`.
   <dd>The linear index to convert.</dd>
 </dl>
 
-The reverse mapping is done with `pwio::utils::entIjkToIndex`.
+The reverse mapping is done with **pwio::utils::entIjkToIndex**.
 
 
 <br/>
@@ -311,6 +314,7 @@ Returns a [grid coord][gridCoord] for the given `ent` and linear index.
   <dd>A 1-based index relative to <code>ent</code>'s index space.</dd>
 </dl>
 
+
 <br/>
 ```Tcl
 pwio::utils::sortEntsByType { ents }
@@ -321,7 +325,7 @@ Returns a list containing `ents` in base type sorted order.
   <dd>The list of grid entites to sort.</dd>
 </dl>
 
-The list will be in Block, Domain, Connector, Node order.
+The list will be in **Block**, **Domain**, **Connector**, **Node** order.
 
 
 <br/>
@@ -331,10 +335,10 @@ pwio::utils::pointToString { pt }
 Returns a string representation of `pt`.
 <dl>
   <dt><code>pt</code></dt>
-  <dd>A point as an {x y z} or {u v dbEnt} list.</dd>
+  <dd>A point as an **{x y z}** or **{u v dbEnt}** list.</dd>
 </dl>
 
-The resulting string will be one of "{u v dbEnt}" or "{x y z}".
+The resulting string will be one of "*{x y z}*" or "*{u v dbEnt}*".
 
 
 <br/>
@@ -344,9 +348,9 @@ pwio::utils::xyzEqual { xyz1 xyz2 {tol 1e-8} }
 Returns true if two xyz points are equal within the given tolerance.
 <dl>
   <dt><code>xyz1</code></dt>
-  <dd>First point as an {x y z} list.</dd>
+  <dd>First point as an **{x y z}** list.</dd>
   <dt><code>xyz2</code></dt>
-  <dd>Second point as an {x y z} list.</dd>
+  <dd>Second point as an **{x y z}** list.</dd>
   <dt><code>tol</code></dt>
   <dd>The optional comparison tolerance.</dd>
 </dl>
@@ -388,14 +392,14 @@ Returns a string representation of a [volume condition][volCond].
   <dd>The volume condition.</dd>
 </dl>
 
-The resulting string format will be "vcName vcId vcPhysicalType"
+The resulting string format will be "*vcName vcId vcPhysicalType*"
 
 
 <br/>
 ```Tcl
 pwio::utils::labelPt { ndx pt }
 ```
-Returns a [`pw::Note`][pwNote] entity positioned at `pt`.
+Returns a [**pw::Note**][pwNote] entity positioned at `pt`.
 <dl>
   <dt><code>ndx</code></dt>
   <dd>The note text value.</dd>
@@ -435,13 +439,13 @@ Prompts the user and returns true if one or more entities have been selected.
   <dd>Required. If false is returned, a failure message is stored in this variable.</dd>
 </dl>
 
-The valid `selType` values are `Connector`, `Domain`, `Block`, `Database`, `Spacing` or `Boundary`.
+The valid `selType` values are **Connector**, **Domain**, **Block**, **Database**, **Spacing** or **Boundary**.
 
 Only visible and enabled entities are considered for selection.
 
 If only 1 entity of the the given `selType` is selectable, it is returned **without** prompting the user.
 
-See also, `pwio::getSelectType`.
+See also, **pwio::getSelectType**.
 
 
 <br/>
