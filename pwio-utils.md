@@ -515,9 +515,8 @@ if { [pwio::utils::getSelection $selType selectedEnts errMsg] } {
 }
 ```
 
-**Output**
+**Output (edited)**
 
-    Output (edited):
     CAE Dimension : 3
     Selection Type: Block
     TEST
