@@ -493,13 +493,13 @@ Exporting a grid using **pwio** requires the same basic sequence:
 * Call `pwio::endIO` when finished.
 
 
-# Example Usage
+## Example Usage
 The following section show how to use **pwio** in conjuction with the standard Glyph calls.
 
 While many formats have a lot in common, each export format will have differing needs. The usage examples given below will not be needed by every exporter.
 
 
-## Access Grid Points
+### Access Grid Points
 
 ```Tcl
 pwio::beginIO $gridEntsToExport
@@ -526,9 +526,9 @@ for {set ii 1} {$ii <= $coordCnt} {incr ii} {
 pwio::endIO
 ```
 
-## Access Cell Connectivity
+### Access Cell Connectivity
 
-### Entity By Entity Access
+#### Entity By Entity Access
 
 Accessing interior and boundary cell connectivity is done on an entity by entity
 basis.
@@ -577,7 +577,7 @@ Things to consider:
    * The [pw::Domain][pwDomain] boundary cells can be enumerated in a manner similar to the volume cells example.
 
 
-### Global Access
+#### Global Access
 Like grid points, some export formats require the serial enumeration (1 to N) of
 all unique cells.
 
