@@ -45,9 +45,10 @@ Asserts that `cond` evaluates to **true**. If **false**, `msg` is displayed and 
 ```Tcl
 set ndx 5
 set ent [pw::Grid getByName "blk-1"]
-assert "$ndx >= 1 && $ndx < [$ent getPointCount]" "Bad Index $ndx for '[$ent getName]'"
+pwio::utils::assert "$ndx >= 1 && $ndx < [$ent getPointCount]" \
+                    "Bad Index $ndx for '[$ent getName]'"
 
-# The output if assert fails:
+# Output (if assert fails):
 # assert failed: ($ndx >= 1 && $ndx < 3)
 # message      : Bad Index 5 for 'blk-1'
 ```
@@ -88,19 +89,17 @@ foreach selType {Block Domain Connector} {
         puts "  [$ent getName]($ent) baseType='$baseType' subType='$subType'"
     }
 }
-```
 
-**Output:**
-```
-Block selection:
-  blk-3(::pw::BlockExtruded_1) baseType='Block' subType='Extruded'
-  blk-1(::pw::BlockUnstructured_1) baseType='Block' subType='Unstructured'
-Domain selection:
-  dom-18(::pw::DomainUnstructured_2) baseType='Domain' subType='Unstructured'
-  dom-26(::pw::DomainStructured_6) baseType='Domain' subType='Structured'
-Connector selection:
-  con-55(::pw::Connector_22) baseType='Connector' subType='Connector'
-  con-37(::pw::Connector_20) baseType='Connector' subType='Connector'
+# Output:
+# Block selection:
+#   blk-3(::pw::BlockExtruded_1) baseType='Block' subType='Extruded'
+#   blk-1(::pw::BlockUnstructured_1) baseType='Block' subType='Unstructured'
+# Domain selection:
+#   dom-18(::pw::DomainUnstructured_2) baseType='Domain' subType='Unstructured'
+#   dom-26(::pw::DomainStructured_6) baseType='Domain' subType='Structured'
+# Connector selection:
+#   con-55(::pw::Connector_22) baseType='Connector' subType='Connector'
+#   con-37(::pw::Connector_20) baseType='Connector' subType='Connector'
 ```
 
 
@@ -116,6 +115,8 @@ Returns an list of `blk`'s face entities.
 
 The returned list contains [pw::Face][pwFace] entities.
 
+See [Example 2](example-2) for usage.
+
 
 <br/>
 ```Tcl
@@ -126,6 +127,8 @@ Returns `blk`'s domains as a list of [pw::Domain][pwDomain] entities. It is poss
   <dt><code>blk</code></dt>
   <dd>A block entity.</dd>
 </dl>
+
+See [Example 2](example-2) for usage.
 
 
 <br/>
@@ -138,6 +141,8 @@ Returns `face`'s domains as a list of [pw::Domain][pwDomain] entities. It is pos
   <dd>A face entity.</dd>
 </dl>
 
+See [Example 2](example-2) for usage.
+
 
 <br/>
 ```Tcl
@@ -149,6 +154,8 @@ Returns `face`'s edges as a list of [pw::Edge][pwEdge] entities. The first edge 
   <dd>A face entity.</dd>
 </dl>
 
+See [Example 2](example-2) for usage.
+
 
 <br/>
 ```Tcl
@@ -159,6 +166,8 @@ Returns `edge`'s connectors as a list of [pw::Connector][pwConnector] entities. 
   <dt><code>edge</code></dt>
   <dd>An edge entity.</dd>
 </dl>
+
+See [Example 2](example-2) for usage.
 
 
 <br/>
@@ -184,6 +193,8 @@ Returns the number of [grid points][point] on `ent`'s outer perimeter. This coun
 
 `ent` must be a [pw::Node][pwNode], [pw::Connector][pwConnector], [pw::Domain][pwDomain], [pw::Face][pwFace] or [pw::Block][pwBlock] entity.
 
+See [Example 2](example-2) for usage.
+
 
 <br/>
 ```Tcl
@@ -196,6 +207,8 @@ Returns the number of [grid points][point] on `ent`'s interior (non-perimeter po
 </dl>
 
 `ent` must be a [pw::Node][pwNode], [pw::Connector][pwConnector], [pw::Domain][pwDomain], [pw::Face][pwFace] or [pw::Block][pwBlock] entity.
+
+See [Example 2](example-2) for usage.
 
 
 <br/>
@@ -211,6 +224,8 @@ Returns **true** if `ent` lies on the boundary of `allEnts`.
 </dl>
 
 An error will occur if `ent` is anything other than a [pw::Connector][pwConnector] entity in 2D and anything other than a [pw::Domain][pwDomain] entity in 3D.
+
+See [Example 2](example-2) for usage.
 
 
 <br/>
@@ -524,6 +539,27 @@ Shared support entities are only included in `supEntsVarName` once.
 ### Example 1
 
 ```Tcl
+package require PWI_Glyph 2.17.0
+source [file join [file dirname [info script]] ".." "pwio.glf"]
+
+proc nm { ent } {
+    if { "" != "$ent" } {
+        return [$ent getName]
+    }
+    return ""
+}
+
+proc dumpEnts { title ents } {
+    puts ""
+    puts "$title"
+    while { 0 != [llength $ents] } {
+        set ents [lassign $ents ent1 ent2 ent3 ent4 ent5 ent6 ent7 ent8 ent9 ent10]
+        puts [format "%8s %8s %8s %8s %8s %8s %8s %8s" \
+            [nm $ent1] [nm $ent2] [nm $ent3] [nm $ent4] [nm $ent5] \
+            [nm $ent6] [nm $ent7] [nm $ent8] [nm $ent9] [nm $ent10]]
+    }
+}
+
 set dim [pwio::getCaeDim]
 puts "CAE Dimension : $dim"
 
@@ -535,36 +571,223 @@ if { ![pwio::utils::getSelection $selType selectedEnts errMsg] } {
 } elseif { ![pwio::utils::getSupportEnts $selectedEnts selAndSupEnts true] } {
     puts "pwio::utils::getSupportEnts failed"
 } else {
+    dumpEnts "UNSORTED:" $selAndSupEnts
+    dumpEnts "SORTED:" [pwio::utils::sortEntsByType $selAndSupEnts]
+    puts ""
     pwio::utils::printEntInfo "TEST" $selAndSupEnts $dim $selectedEnts
 }
 ```
 
-*Output (edited):*
+*Output:*
 
     CAE Dimension : 3
     Selection Type: Block
+
+    UNSORTED:
+       blk-4    blk-5   con-44   con-45   dom-11   dom-28   dom-22   dom-24
+      dom-20   con-40   dom-21   con-26   con-49   con-27   con-47   con-28
+     Node_24  Node_25  Node_26  Node_27   con-19    dom-1  Node_28   dom-29
+      con-41   dom-23  Node_31   dom-27   dom-25  Node_32  Node_33  Node_34
+     Node_36   con-42   con-43   con-50   con-51    con-1   con-57   con-54
+      con-53
+
+    SORTED:
+       blk-4    blk-5   dom-11   dom-28   dom-22   dom-24   dom-26   dom-20
+      dom-29   dom-23   dom-27   dom-25   con-44   con-45   con-46   con-40
+      con-27   con-47   con-28   con-52   con-19   con-41   con-55   con-42
+      con-51    con-1   con-57   con-54   con-48   con-56   con-53  Node_23
+     Node_26  Node_27  Node_28  Node_29  Node_30  Node_31  Node_32  Node_33
+     Node_36
+
     TEST
-    | Entity                         | Name            |     NumPts |  DbPts | Dim       | BaseType   | BorC  |
-    | ------------------------------ | --------------- | ---------- | ------ | --------- | ---------- | ----- |
-    | ::pw::BlockUnstructured_1      | blk-1           |         92 |        | 92 1 1    | Block      |       |
-    | ::pw::BlockUnstructured_2      | blk-2           |         57 |        | 57 1 1    | Block      |       |
-    | ::pw::BlockExtruded_1          | blk-3           |         48 |        | 12 1 4    | Block      |       |
-    | ::pw::DomainUnstructured_2     | dom-18          |         12 |        | 12 1      | Domain     | Bndry |
-    | ::pw::DomainUnstructured_3     | dom-29          |         14 |     14 | 14 1      | Domain     | Bndry |
-    | ::pw::DomainUnstructured_5     | dom-21          |         12 |        | 12 1      | Domain     | Bndry |
-    | ::pw::DomainUnstructured_6     | dom-19          |         12 |        | 12 1      | Domain     | Cnxn  |
-    | ::pw::DomainUnstructured_7     | dom-17          |         16 |        | 16 1      | Domain     | Bndry |
-                                               ...SNIP...
-    | ::pw::Connector_18             | con-47          |          3 |        | 3         | Connector  |       |
-    | ::pw::Connector_9              | con-41          |          4 |        | 4         | Connector  |       |
-    | ::pw::Connector_19             | con-56          |          3 |      3 | 3         | Connector  |       |
-    | ::pw::Connector_24             | con-45          |          3 |        | 3         | Connector  |       |
-    | ::pw::Connector_25             | con-54          |          3 |      3 | 3         | Connector  |       |
-                                               ...SNIP...
-    | ::pw::Node_10                  | Node_10         |          1 |      1 | 1         | Node       |       |
-    | ::pw::Node_11                  | Node_11         |          1 |        | 1         | Node       |       |
-    | ::pw::Node_2                   | Node_2          |          1 |        | 1         | Node       |       |
-    | ::pw::Node_3                   | Node_3          |          1 |        | 1         | Node       |       |
+    | Entity                         | Name                 |  NumPts |  DbPts | Dim       | BaseType   | BorC  |
+    | ------------------------------ | -------------------- | ------- | ------ | --------- | ---------- | ----- |
+    | ::pw::BlockStructured_1        | blk-4                |      36 |        | 3 4 3     | Block      |       |
+    | ::pw::BlockStructured_2        | blk-5                |      36 |        | 3 4 3     | Block      |       |
+    | ::pw::DomainStructured_25      | dom-11               |      12 |      3 | 3 4       | Domain     | Bndry |
+    | ::pw::DomainStructured_26      | dom-28               |      12 |      1 | 4 3       | Domain     | Bndry |
+    | ::pw::DomainStructured_27      | dom-22               |       9 |        | 3 3       | Domain     | Bndry |
+    | ::pw::DomainStructured_28      | dom-24               |      12 |      1 | 4 3       | Domain     | Bndry |
+    | ::pw::DomainStructured_29      | dom-26               |       9 |      3 | 3 3       | Domain     | Bndry |
+    | ::pw::DomainStructured_30      | dom-20               |       6 |        | 3 2       | Domain     | Bndry |
+    | ::pw::DomainStructured_31      | dom-21               |       9 |        | 3 3       | Domain     | Bndry |
+    | ::pw::DomainStructured_47      | dom-1                |      12 |        | 3 4       | Domain     | Cnxn  |
+    | ::pw::DomainStructured_48      | dom-29               |      12 |        | 4 3       | Domain     | Bndry |
+
+                                                ...SNIP...
+
+    | ::pw::Connector_176            | con-41               |       3 |        | 3         | Connector  |       |
+    | ::pw::Connector_181            | con-55               |       3 |      1 | 3         | Connector  |       |
+    | ::pw::Connector_186            | con-42               |       3 |        | 3         | Connector  |       |
+    | ::pw::Connector_190            | con-43               |       2 |        | 2         | Connector  |       |
+    | ::pw::Connector_200            | con-50               |       3 |        | 3         | Connector  |       |
+
+                                                ...SNIP...
+
+    | ::pw::Node_26                  | Node_26              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_27                  | Node_27              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_28                  | Node_28              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_29                  | Node_29              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_30                  | Node_30              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_31                  | Node_31              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_32                  | Node_32              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_33                  | Node_33              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_34                  | Node_34              |       1 |        | 1         | Node       |       |
+    | ::pw::Node_35                  | Node_35              |       1 |      1 | 1         | Node       |       |
+    | ::pw::Node_36                  | Node_36              |       1 |      1 | 1         | Node       |       |
+
+
+### Example 2
+
+```Tcl
+package require PWI_Glyph 2.17.0
+source [file join [file dirname [info script]] ".." "pwio.glf"]
+
+if { ![pwio::utils::getSelection Block blks errMsg] } {
+    puts $errMsg
+    continue
+}
+foreach blk $blks {
+    set perimPtCnt [pwio::utils::getPerimeterPointCount $blk]
+    set ownedPtCnt [pwio::utils::getOwnedPointCount $blk]
+    puts "--------------------------------------------------------------------"
+    puts "BLOCK [$blk getName] ($blk) | perim $perimPtCnt | owned $ownedPtCnt"
+    puts "BLOCK DOMAINS"
+    set doms [pwio::utils::getBlockDomains $blk]
+    foreach dom $doms {
+        if { [pwio::utils::isBndryEnt $dom $blks] } {
+            set domUsage "Boundary"
+        } else {
+            set domUsage "Connection"
+        }
+        set perimPtCnt [pwio::utils::getPerimeterPointCount $dom]
+        set ownedPtCnt [pwio::utils::getOwnedPointCount $dom]
+        puts "    [$dom getName]($dom) | perim $perimPtCnt | owned $ownedPtCnt | usage $domUsage"
+    }
+
+    puts "BLOCK FACES"
+    set faces [pwio::utils::getBlockFaces $blk]
+    foreach face $faces {
+        set perimPtCnt [pwio::utils::getPerimeterPointCount $face]
+        set ownedPtCnt [pwio::utils::getOwnedPointCount $face]
+        puts "  FACE $face | perim $perimPtCnt | owned $ownedPtCnt"
+        puts "    FACE DOMAINS"
+        set doms [pwio::utils::getFaceDomains $face]
+        foreach dom $doms {
+            puts "      DOM [$dom getName] ($dom)"
+        }
+        puts "    FACE EDGES"
+        set edges [pwio::utils::getFaceEdges $face]
+        foreach edge $edges {
+            puts "      EDGE $edge"
+            puts "        EDGE CONNECTORS"
+            set cons [pwio::utils::getEdgeConnectors $edge]
+            foreach con $cons {
+                set perimPtCnt [pwio::utils::getPerimeterPointCount $con]
+                set ownedPtCnt [pwio::utils::getOwnedPointCount $con]
+                puts "          CON [$con getName] ($con) | perim $perimPtCnt | owned $ownedPtCnt"
+            }
+        }
+    }
+}
+```
+
+*Output:*
+
+    --------------------------------------------------------------------
+    BLOCK blk-5 (::pw::BlockStructured_2) | perim 34 | owned 2
+    BLOCK DOMAINS
+        dom-1(::pw::DomainStructured_47) | perim 10 | owned 2 | usage Connection
+        dom-29(::pw::DomainStructured_48) | perim 10 | owned 2 | usage Boundary
+        dom-23(::pw::DomainStructured_49) | perim 8 | owned 1 | usage Boundary
+        dom-25(::pw::DomainStructured_51) | perim 10 | owned 2 | usage Boundary
+        dom-27(::pw::DomainStructured_50) | perim 8 | owned 1 | usage Boundary
+        dom-20(::pw::DomainStructured_30) | perim 6 | owned 0 | usage Boundary
+        dom-21(::pw::DomainStructured_31) | perim 8 | owned 1 | usage Boundary
+    BLOCK FACES
+      FACE ::pw::FaceStructured_17 | perim 10 | owned 0
+        FACE DOMAINS
+          DOM dom-1 (::pw::DomainStructured_47)
+        FACE EDGES
+          EDGE ::pw::Edge_98
+            EDGE CONNECTORS
+              CON con-1 (::pw::Connector_194) | perim 2 | owned 1
+          EDGE ::pw::Edge_99
+            EDGE CONNECTORS
+              CON con-51 (::pw::Connector_193) | perim 2 | owned 2
+          EDGE ::pw::Edge_100
+            EDGE CONNECTORS
+              CON con-54 (::pw::Connector_196) | perim 2 | owned 1
+          EDGE ::pw::Edge_101
+            EDGE CONNECTORS
+              CON con-57 (::pw::Connector_195) | perim 2 | owned 2
+
+                            ...SNIP...
+
+      FACE ::pw::FaceStructured_22 | perim 10 | owned 0
+        FACE DOMAINS
+          DOM dom-20 (::pw::DomainStructured_30)
+          DOM dom-21 (::pw::DomainStructured_31)
+        FACE EDGES
+          EDGE ::pw::Edge_118
+            EDGE CONNECTORS
+              CON con-40 (::pw::Connector_158) | perim 2 | owned 1
+          EDGE ::pw::Edge_119
+            EDGE CONNECTORS
+              CON con-45 (::pw::Connector_152) | perim 2 | owned 0
+              CON con-46 (::pw::Connector_157) | perim 2 | owned 1
+          EDGE ::pw::Edge_120
+            EDGE CONNECTORS
+              CON con-41 (::pw::Connector_176) | perim 2 | owned 1
+          EDGE ::pw::Edge_121
+            EDGE CONNECTORS
+              CON con-44 (::pw::Connector_148) | perim 2 | owned 1
+              CON con-43 (::pw::Connector_190) | perim 2 | owned 0
+    --------------------------------------------------------------------
+    BLOCK blk-4 (::pw::BlockStructured_1) | perim 34 | owned 2
+    BLOCK DOMAINS
+        dom-11(::pw::DomainStructured_25) | perim 10 | owned 2 | usage Boundary
+        dom-28(::pw::DomainStructured_26) | perim 10 | owned 2 | usage Boundary
+        dom-22(::pw::DomainStructured_27) | perim 8 | owned 1 | usage Boundary
+        dom-24(::pw::DomainStructured_28) | perim 10 | owned 2 | usage Boundary
+        dom-26(::pw::DomainStructured_29) | perim 8 | owned 1 | usage Boundary
+        dom-1(::pw::DomainStructured_47) | perim 10 | owned 2 | usage Connection
+    BLOCK FACES
+      FACE ::pw::FaceStructured_23 | perim 10 | owned 0
+        FACE DOMAINS
+          DOM dom-11 (::pw::DomainStructured_25)
+        FACE EDGES
+          EDGE ::pw::Edge_122
+            EDGE CONNECTORS
+              CON con-19 (::pw::Connector_174) | perim 2 | owned 1
+          EDGE ::pw::Edge_123
+            EDGE CONNECTORS
+              CON con-26 (::pw::Connector_159) | perim 2 | owned 2
+          EDGE ::pw::Edge_124
+            EDGE CONNECTORS
+              CON con-27 (::pw::Connector_163) | perim 2 | owned 1
+          EDGE ::pw::Edge_125
+            EDGE CONNECTORS
+              CON con-28 (::pw::Connector_168) | perim 2 | owned 2
+
+                            ...SNIP...
+
+      FACE ::pw::FaceStructured_28 | perim 10 | owned 0
+        FACE DOMAINS
+          DOM dom-1 (::pw::DomainStructured_47)
+        FACE EDGES
+          EDGE ::pw::Edge_142
+            EDGE CONNECTORS
+              CON con-1 (::pw::Connector_194) | perim 2 | owned 1
+          EDGE ::pw::Edge_143
+            EDGE CONNECTORS
+              CON con-51 (::pw::Connector_193) | perim 2 | owned 2
+          EDGE ::pw::Edge_144
+            EDGE CONNECTORS
+              CON con-54 (::pw::Connector_196) | perim 2 | owned 1
+          EDGE ::pw::Edge_145
+            EDGE CONNECTORS
+              CON con-57 (::pw::Connector_195) | perim 2 | owned 2
 
 
 ### Disclaimer
