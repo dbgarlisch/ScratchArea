@@ -61,7 +61,7 @@ pwio::endIO { {clearAllLocks 0} }
 Cleans up after an export. Must be called once at the end of an export.
 <dl>
   <dt><code>clearAllLocks</code></dt>
-  <dd>If 1, all entity locks will be released even if **pwio** did not make them.</dd>
+  <dd>If 1, all entity locks will be released even if <b>pwio</b> did not make them.</dd>
 </dl>
 
 Typically, `clearAllLocks` should be 0.
@@ -81,7 +81,7 @@ pwio::getCoord { enumNdx }
 Get an export grid coord.
 <dl>
   <dt><code>enumNdx</code></dt>
-  <dd>The grid coord index from 1 to getCoordCount.</dd>
+  <dd>The grid coord index from 1 to <b>pwio::getCoordCount</b>.</dd>
 </dl>
 
 
@@ -94,10 +94,10 @@ Returns the index corresponding to a [grid coord][coord].
   <dt><code>coord</code></dt>
   <dd>The grid coord.</dd>
   <dt><code>mapCoordToOwner</code></dt>
-  <dd>If 1, coord is be mapped to its owning entity before mapping.</dd>
+  <dd>If 1, <code>coord</code> needs to be mapped to its owning entity.</dd>
 </dl>
 
-If you know that the [grid coord][coord]'s entity is already the owner, this call is faster if you set this argument to 0.
+If you know that the [grid coord][coord]'s entity is already the owner, this call is faster if you set `mapCoordToOwner` to 0.
 
 
 <br/>
@@ -150,9 +150,9 @@ Returns an export cell's edges as a list of global pwio indices.
   <dt><code>cellVarName</code></dt>
   <dd>If provided, this var receives the cell's indices.</dd>
   <dt><code>minFirstOrder</code></dt>
-  <dd>If 1, edge indices are rearranged with the minimum index first.</dd>
+  <dd>If 1, edge indices are reversed, if needed, so that the minimum index value is first.</dd>
   <dt><code>revVarName</code></dt>
-  <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
+  <dd>If provided, this var receives a list of edge flags. A flag is set to 1 if the
 	  edge was min first reversed.</dd>
 </dl>
 
@@ -168,48 +168,51 @@ Returns an export cell's edges as a list of global pwio indices in min first ord
   <dt><code>enumNdx</code></dt>
   <dd>A grid cell index from 1 to <b>pwio::getCellCount</b>.</dd>
   <dt><code>cellVarName</code></dt>
-  <dd>If provided, this var receives the cell's indices.
-	  See <code>pwio::getCell</code>.</dd>
+  <dd>If provided, this var receives the cell's indices.</dd>
   <dt><code>revVarName</code></dt>
-  <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
+  <dd>If provided, this var receives a list of edge flags. A flag is set to 1 if the
       edge was min first reversed.</dd>
 </dl>
+
+See also, **pwio::getCell**
 
 
 <br/>
 ```Tcl
 pwio::getFaceEdges { face {cellVarName ""} {minFirstOrder 0} {revVarName ""} }
 ```
-Returns a list of face's edges. Each edge is a list of global pwio indices (a list of lists).
+Returns a list of `face`'s edges. Each edge is a list of global pwio indices (a list of lists).
 <dl>
   <dt><code>face</code></dt>
-  <dd>A face as a list of global pwio indices.
-      See <code>pwio::getCellFaces</code>.</dd>
+  <dd>A face as a list of global pwio indices.</dd>
   <dt><code>cellVarName</code></dt>
   <dd>If provided, this var receives a copy of face.</dd>
   <dt><code>minFirstOrder</code></dt>
-  <dd>If 1, edge indices are rearranged with the minimum index first.</dd>
+  <dd>If 1, edge indices are reversed, if needed, so that the minimum index value is first.</dd>
   <dt><code>revVarName</code></dt>
-  <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
+  <dd>If provided, this var receives a list of edge flags. A flag is set to 1 if the
       edge was min first reversed.</dd>
 </dl>
+
+See also, **pwio::getCellFaces**
 
 
 <br/>
 ```Tcl
 pwio::getMinFirstFaceEdges { face {cellVarName ""} {revVarName ""} }
 ```
-Returns face's edges as a list of global pwio indices in min first order.
+Returns `face`'s edges as a list of global pwio indices in min first order.
 <dl>
   <dt><code>face</code></dt>
-  <dd>A face as a list of global pwio indices.
-      See <code>pwio::getCellFaces</code>.</dd>
+  <dd>A face as a list of global pwio indices.</dd>
   <dt><code>cellVarName</code></dt>
   <dd>If provided, this var receives a copy of face.</dd>
   <dt><code>revVarName</code></dt>
-  <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
+  <dd>If provided, this var receives a list of edge flags. A flag is set to 1 if the
       edge was min first reversed.</dd>
 </dl>
+
+See also, **pwio::getCellFaces**
 
 
 <br/>
@@ -223,7 +226,7 @@ Returns a list of a grid cell's faces. Each face is a list of global pwio indice
   <dt><code>cellVarName</code></dt>
   <dd>If provided, this var receives the cell's unmodified indices.</dd>
   <dt><code>minFirstOrder</code></dt>
-  <dd>If 1, the face indices are rotated such that the minimum index is
+  <dd>If 1, the face indices are rotated so that the minimum index value is
       first. The relative ordering of the vertices is not changed (the face
       normal is not flipped).</dd>
 </dl>
@@ -256,9 +259,9 @@ Returns the grid cell's type.
   <dd>The grid cell index from 1 to <b>pwio::getCellCount</b>.</dd>
 </dl>
 
-For a 2D grid, the cell type will be one *tri* or *quad*.
+For a 2D grid, the cell type will be one **tri** or **quad**.
 
-For a 3D grid, the cell type will be one *tet*, *pyramid*, *prism*, or *hex*.
+For a 3D grid, the cell type will be one **tet**, **pyramid**, **prism**, or **hex**.
 
 
 <br/>
@@ -271,9 +274,9 @@ Returns the face type.
   <dd>A face as a list of global pwio indices.</dd>
 </dl>
 
-For a 2D grid, the face type will be  *bar*.
+For a 2D grid, the face type will be **bar**.
 
-For a 3D grid, the face type will be one *tri* or *quad*.
+For a 3D grid, the face type will be one **tri** or **quad**.
 
 See also, **pwio::getCellFaces**.
 
@@ -306,9 +309,9 @@ Returns an entity cell's edges as a list of global pwio indices. These indices a
   <dt><code>cellVarName</code></dt>
   <dd>If provided, this var receives the cell's indices.</dd>
   <dt><code>minFirstOrder</code></dt>
-  <dd>If 1, edge indices are rearranged with the minimum index first.</dd>
+  <dd>If 1, edge indices are reversed, if needed, so that the minimum index value is first.</dd>
   <dt><code>revVarName</code></dt>
-  <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
+  <dd>If provided, this var receives a list of edge flags. A flag is set to 1 if the
       edge was min first reversed.</dd>
 </dl>
 
@@ -328,7 +331,7 @@ Returns an entity cell's edges as a list of global pwio indices in min first ord
   <dt><code>cellVarName</code></dt>
   <dd>If provided, this var receives the cell's indices.</dd>
   <dt><code>revVarName</code></dt>
-  <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
+  <dd>If provided, this var receives a list of edge flags. A flag is set to 1 if the
       edge was min first reversed.</dd>
 </dl>
 
@@ -346,7 +349,7 @@ Returns 2 if the grid dimensionality is 2D or 3 if the grid dimensionality is 3D
 ```Tcl
 pwio::getSelectType {}
 ```
-Returns **Domain** if the grid dimensionality is 2 or **Block** if 3.
+Returns **Domain** if the grid dimensionality is 2D or **Block** if the grid dimensionality is 3D.
 
 See `pwio::utils::getSelection`.
 
@@ -411,7 +414,7 @@ Returns the ijk index of the [grid coord][coord].
 ```Tcl
 pwio::Level
 ```
-Enumerated entity level values.
+Enumerated entity level integer values.
 
 Accessed as:
 
@@ -533,7 +536,7 @@ basis.
 ```Tcl
 pwio::beginIO $gridEntsToExport
 
-# Access the top-level pw::Domain (2D) or a pw::Block (3D) volume cells.
+# Access the top-level pw::Domain (2D) or pw::Block (3D) volume cells.
 foreach ent $gridEntsToExport {
   # Get vc asigned to $ent
   set vc [$ent getVolumeCondition]
@@ -546,12 +549,12 @@ foreach ent $gridEntsToExport {
   }
 }
 
-# Access the top-level pw::Domain (2D) or a pw::Block (3D) volume cells.
+# Access the pw::Connector (2D) or a pw::Domain (3D) boundary cells.
 bcNames [pw::BoundaryCondition getNames]
 foreach bcName $bcNames {
   set bc [pw::BoundaryCondition getByName $bcName]
-  # Get the boundary grid entites using $bc. $bcEnts will contain pw::Connector
-  # (2D) or a pw::Domain (3D) entities.
+  # Get the boundary grid entites using $bc. $bcEnts will contain
+  # pw::Connector (2D) or a pw::Domain (3D) entities.
   set bcEnts [$bc getEntities]
   # See notes below about handling the boundary entities.
 }
