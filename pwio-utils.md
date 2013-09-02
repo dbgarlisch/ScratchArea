@@ -400,7 +400,7 @@ Returns a string representation of a [grid coord][coord].
 ```Tcl
 pwio::utils::vcToString { vc }
 ```
-Returns a string representation of a [volume condition][pwVolumeCondition].
+Returns a string representation of a [pw::VolumeCondition][pwVolumeCondition].
 <dl>
   <dt><code>vc</code></dt>
   <dd>The volume condition.</dd>

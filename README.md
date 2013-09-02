@@ -1,9 +1,9 @@
 # glyph-pwio
 A Glyph library that helps with the export of 2D or 3D grid data to an unstructured format.
 
-Exporting grid data to an unstructured format requires the serial enumeration (1 to N) of all unique grid points. However, because Pointwise grid entites share points, *non-trivial* data management is needed to efficiently serialize the grid points. The `pwio` library provides the required data management.
+Exporting grid data to an unstructured format requires the serial enumeration (1 to N) of all unique grid points. However, because Pointwise grid entites share points, *non-trivial* data management is needed to efficiently serialize the grid points. The **pwio** library provides the required data management.
 
-The `pwio` library supports both structured and unstructured Pointwise grid entities. However, structured entities are exported as unstructured quads and hexes.
+The **pwio** library supports both structured and unstructured Pointwise grid entities. However, structured entities are exported as unstructured quads and hexes.
 
 
 ## Limitations
@@ -29,9 +29,9 @@ The `pwio` library supports both structured and unstructured Pointwise grid enti
 
 ## Namespace pwio
 
-All of the procs in this collection reside in the `pwio` namespace.
+All of the procs in this collection reside in the **pwio** namespace.
 
-To call a proc in this collection, you must prefix the proc name with a `pwio::` namespace specifier.
+To call a proc in this collection, you must prefix the proc name with a **pwio::** namespace specifier.
 
 For example:
 ```Tcl
@@ -49,9 +49,9 @@ Prepare a list of grid entities for export. Must be called once at the beginning
   <dd>The entities to export.</dd>
 </dl>
 
-For a 2D grid, `ents` should contain `pw::Domain` entities.
+For a 2D grid, `ents` should contain [pw::Domain][pwDomain] entities.
 
-For a 3D grid, `ents` should contain `pw::Block` entities.
+For a 3D grid, `ents` should contain [pw::Block][pwBlock] entities.
 
 
 <br/>
@@ -61,8 +61,10 @@ pwio::endIO { {clearAllLocks 0} }
 Cleans up after an export. Must be called once at the end of an export.
 <dl>
   <dt><code>clearAllLocks</code></dt>
-  <dd>If 1, all locks will be released even if `pwio` did not make them. Typically, the default of 0 should be used.</dd>
+  <dd>If 1, all entity locks will be released even if **pwio** did not make them.</dd>
 </dl>
+
+Typically, `clearAllLocks` should be 0.
 
 
 <br/>
@@ -87,7 +89,7 @@ Get an export grid coord.
 ```Tcl
 pwio::getCoordIndex { coord {mapCoordToOwner 1} }
 ```
-Returns the index corresponding to an export grid coord.
+Returns the index corresponding to a [grid coord][coord].
 <dl>
   <dt><code>coord</code></dt>
   <dd>The grid coord.</dd>
@@ -95,7 +97,7 @@ Returns the index corresponding to an export grid coord.
   <dd>If 1, coord is be mapped to its owning entity before mapping.</dd>
 </dl>
 
-If you know that the coord's entity is already the owner, this call is faster if you set this argument to 0.
+If you know that the [grid coord][coord]'s entity is already the owner, this call is faster if you set this argument to 0.
 
 
 <br/>
@@ -104,9 +106,9 @@ pwio::getCellCount {}
 ```
 Returns the number of unique, serialized grid cells in this export.
 
-For a 2D grid, the cells will be of type *tri* or *quad*.
+For a 2D grid, the cells will be of type **tri** or **quad**.
 
-For a 3D grid, the cells will be of type *tet*, *pyramid*, *prism*, or *hex*.
+For a 3D grid, the cells will be of type **tet**, **pyramid**, **prism**, or **hex**.
 
 
 <br/>
@@ -116,10 +118,12 @@ pwio::getCell { enumNdx {vcVarName ""} }
 Returns an export grid cell as a list of global pwio indices.
 <dl>
   <dt><code>enumNdx</code></dt>
-  <dd>The grid cell index from 1 to getCellCount.</dd>
+  <dd>A grid cell index from 1 to <b>pwio::getCellCount</b>.</dd>
   <dt><code>vcVarName</code></dt>
-  <dd>If provided, the cell's <code>pw::VolumeCondition</code> is stored in this variable.</dd>
+  <dd>If provided, the cell's volume condition is stored in this variable.</dd>
 </dl>
+
+The object stored in vcVarName is a [pw::VolumeCondition][pwVolumeCondition].
 
 
 <br/>
@@ -131,7 +135,7 @@ Returns the global, export cell index corresponding to an entity's local cell in
   <dt><code>ent</code></dt>
   <dd>The grid entity.</dd>
   <dt><code>entNdx</code></dt>
-  <dd>The cell index in <code>ent</code>'s local index space.</dd>
+  <dd>A cell index in <code>ent</code>'s local index space.</dd>
 </dl>
 
 
@@ -142,16 +146,17 @@ pwio::getCellEdges { enumNdx {cellVarName ""} {minFirstOrder 0} {revVarName ""} 
 Returns an export cell's edges as a list of global pwio indices.
 <dl>
   <dt><code>enumNdx</code></dt>
-  <dd>The grid cell index from 1 to getCellCount.</dd>
+  <dd>A grid cell index from 1 to <b>pwio::getCellCount</b>.</dd>
   <dt><code>cellVarName</code></dt>
-  <dd>If provided, this var receives the cell's indices.
-      See <code>pwio::getCell</code>.</dd>
+  <dd>If provided, this var receives the cell's indices.</dd>
   <dt><code>minFirstOrder</code></dt>
   <dd>If 1, edge indices are rearranged with the minimum index first.</dd>
   <dt><code>revVarName</code></dt>
   <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
 	  edge was min first reversed.</dd>
 </dl>
+
+See also, **pwio::getCell**
 
 
 <br/>
@@ -161,7 +166,7 @@ pwio::getMinFirstCellEdges { enumNdx {cellVarName ""} {revVarName ""} }
 Returns an export cell's edges as a list of global pwio indices in min first order.
 <dl>
   <dt><code>enumNdx</code></dt>
-  <dd>The grid cell index from 1 to getCellCount.</dd>
+  <dd>A grid cell index from 1 to <b>pwio::getCellCount</b>.</dd>
   <dt><code>cellVarName</code></dt>
   <dd>If provided, this var receives the cell's indices.
 	  See <code>pwio::getCell</code>.</dd>
@@ -214,15 +219,16 @@ pwio::getCellFaces { enumNdx {cellVarName ""} {minFirstOrder 0} }
 Returns a list of a grid cell's faces. Each face is a list of global pwio indices (a list of lists).
 <dl>
   <dt><code>enumNdx</code></dt>
-  <dd>The grid cell index from 1 to getCellCount.</dd>
+  <dd>The grid cell index from 1 to <b>pwio::getCellCount</b>.</dd>
   <dt><code>cellVarName</code></dt>
-  <dd>If provided, this var receives the cell's unmodified indices.
-      See <code>pwio::getCell</code>.</dd>
+  <dd>If provided, this var receives the cell's unmodified indices.</dd>
   <dt><code>minFirstOrder</code></dt>
-  <dd>If 1, the face indices are *rotated* such that the minimum index is
+  <dd>If 1, the face indices are rotated such that the minimum index is
       first. The relative ordering of the vertices is not changed (the face
-      normal is *not* flipped).</dd>
+      normal is not flipped).</dd>
 </dl>
+
+See also, **pwio::getCell**.
 
 
 <br/>
@@ -232,11 +238,12 @@ pwio::getMinFirstCellFaces { enumNdx {cellVarName ""} }
 Returns a list of a grid cell's faces in min first order. Each face is a list of global pwio indices (a list of lists).
 <dl>
   <dt><code>enumNdx</code></dt>
-  <dd>The grid cell index from 1 to getCellCount.</dd>
+  <dd>The grid cell index from 1 to <b>pwio::getCellCount</b>.</dd>
   <dt><code>cellVarName</code></dt>
-  <dd>If provided, this var receives the cell's unmodified indices.
-      See <code>pwio::getCell</code>.</dd>
+  <dd>If provided, this var receives the cell's unmodified indices.</dd>
 </dl>
+
+See also, **pwio::getCell**.
 
 
 <br/>
@@ -244,10 +251,9 @@ Returns a list of a grid cell's faces in min first order. Each face is a list of
 pwio::getCellType { enumNdx }
 ```
 Returns the grid cell's type.
-
 <dl>
   <dt><code>enumNdx</code></dt>
-  <dd>The grid cell index from 1 to getCellCount.</dd>
+  <dd>The grid cell index from 1 to <b>pwio::getCellCount</b>.</dd>
 </dl>
 
 For a 2D grid, the cell type will be one *tri* or *quad*.
@@ -262,20 +268,21 @@ pwio::getFaceType { face }
 Returns the face type.
 <dl>
   <dt><code>face</code></dt>
-  <dd>A face as a list of global pwio indices.
-      See <code>pwio::getCellFaces</code>.</dd>
+  <dd>A face as a list of global pwio indices.</dd>
 </dl>
 
 For a 2D grid, the face type will be  *bar*.
 
 For a 3D grid, the face type will be one *tri* or *quad*.
 
+See also, **pwio::getCellFaces**.
+
 
 <br/>
 ```Tcl
 pwio::getEntityCell { ent ndx {localCellVarName ""} }
 ```
-Returns an entity cell as a list of global pwio indices. These indices are only valid for calls to <code>pwio::getCoord</code>.
+Returns an entity cell as a list of global pwio indices. These indices are only valid for calls to **pwio::getCoord**.
 <dl>
   <dt><code>ent</code></dt>
   <dd>The grid entity.</dd>
@@ -290,15 +297,14 @@ Returns an entity cell as a list of global pwio indices. These indices are only 
 ```Tcl
 pwio::getEntityCellEdges { ent ndx {cellVarName ""} {minFirstOrder 0} {revVarName ""} }
 ```
-Returns an entity cell's edges as a list of global pwio indices. These indices are only valid for calls to <code>pwio::getCoord</code>.
+Returns an entity cell's edges as a list of global pwio indices. These indices are only valid for calls to **pwio::getCoord**.
 <dl>
   <dt><code>ent</code></dt>
   <dd>The grid entity.</dd>
   <dt><code>ndx</code></dt>
   <dd>The cell index in <code>ent</code>'s local index space.</dd>
   <dt><code>cellVarName</code></dt>
-  <dd>If provided, this var receives the cell's indices.
-      See <code>pwio::getCell</code>.</dd>
+  <dd>If provided, this var receives the cell's indices.</dd>
   <dt><code>minFirstOrder</code></dt>
   <dd>If 1, edge indices are rearranged with the minimum index first.</dd>
   <dt><code>revVarName</code></dt>
@@ -306,24 +312,27 @@ Returns an entity cell's edges as a list of global pwio indices. These indices a
       edge was min first reversed.</dd>
 </dl>
 
+See also, **pwio::getCell**.
+
 
 <br/>
 ```Tcl
 pwio::getMinFirstEntityCellEdges { ent ndx {cellVarName ""} {revVarName ""} }
 ```
-Returns an entity cell's edges as a list of global pwio indices in min first order. These indices are only valid for calls to <code>pwio::getCoord</code>.
+Returns an entity cell's edges as a list of global pwio indices in min first order. These indices are only valid for calls to **pwio::getCoord**.
 <dl>
   <dt><code>ent</code></dt>
   <dd>The grid entity.</dd>
   <dt><code>ndx</code></dt>
   <dd>The cell index in <code>ent</code>'s local index space.</dd>
   <dt><code>cellVarName</code></dt>
-  <dd>If provided, this var receives the cell's indices.
-      See <code>pwio::getCell</code>.</dd>
+  <dd>If provided, this var receives the cell's indices.</dd>
   <dt><code>revVarName</code></dt>
   <dd>If provided, this var receives a list of flags. A flag is set to 1 if the
       edge was min first reversed.</dd>
 </dl>
+
+See also, **pwio::getCell**.
 
 
 <br/>
@@ -337,7 +346,7 @@ Returns 2 if the grid dimensionality is 2D or 3 if the grid dimensionality is 3D
 ```Tcl
 pwio::getSelectType {}
 ```
-Returns `pw::Domain` if the grid dimensionality is 2 or `pw::Block` if 3.
+Returns **Domain** if the grid dimensionality is 2 or **Block** if 3.
 
 See `pwio::utils::getSelection`.
 
@@ -346,10 +355,10 @@ See `pwio::utils::getSelection`.
 ```Tcl
 pwio::fixCoord { coordVarName }
 ```
-Returns the grid coord corrected to use proper indexing form.
+Returns the [grid coord][coord] corrected to use proper indexing form.
 <dl>
   <dt><code>coordVarName</code></dt>
-  <dd>The grid coord to be modifed if needed. Required.</dd>
+  <dd>Required. The grid coord to be modifed if needed.</dd>
 </dl>
 
 
@@ -357,7 +366,7 @@ Returns the grid coord corrected to use proper indexing form.
 ```Tcl
 pwio::coordMapLower { coord }
 ```
-Returns the grid coord mapped to its next lower level entity.
+Returns the [grid coord][coord] mapped to its next lower level entity.
 <dl>
   <dt><code>coord</code></dt>
   <dd>The grid coord to be mapped.</dd>
@@ -368,7 +377,7 @@ Returns the grid coord mapped to its next lower level entity.
 ```Tcl
 pwio::mapToOwner { coord {trace 0} }
 ```
-Returns the grid coord mapped to its owning entity.
+Returns the [grid coord][coord] mapped to its owning entity.
 <dl>
   <dt><code>coord</code></dt>
   <dd>The grid coord to be mapped.</dd>
@@ -381,7 +390,7 @@ Returns the grid coord mapped to its owning entity.
 ```Tcl
 pwio::coordGetEntity { coord }
 ```
-Returns the entity of the grid coord.
+Returns the entity of the [grid coord][coord].
 <dl>
   <dt><code>coord</code></dt>
   <dd>The grid coord.</dd>
@@ -392,7 +401,7 @@ Returns the entity of the grid coord.
 ```Tcl
 pwio::coordGetIjk { coord }
 ```
-Returns the ijk index of the grid coord.
+Returns the ijk index of the [grid coord][coord].
 <dl>
   <dt><code>coord</code></dt>
   <dd>The grid coord.</dd>
@@ -406,12 +415,12 @@ Enumerated entity level values.
 
 Accessed as:
 
-* `pwio::Level::Block`
-* `pwio::Level::Domain`
-* `pwio::Level::Connector`
-* `pwio::Level::Node`
+* **pwio::Level::Block**
+* **pwio::Level::Domain**
+* **pwio::Level::Connector**
+* **pwio::Level::Node**
 
-See also `coordMapToLevel`, and `entGetLevel`.
+See also **pwio::coordMapToLevel**, and **pwio::entGetLevel**.
 
 
 <br/>
@@ -421,15 +430,17 @@ pwio::entGetLevel { entOrBaseType }
 Returns an entity level value.
 <dl>
   <dt><code>entOrBaseType</code></dt>
-  <dd>A grid entity or one of *Block*, *Domain*, *Connector*, or *Node*.</dd>
+  <dd>A grid entity or an entity base type.</dd>
 </dl>
+
+See also, **pwio::utils::entBaseType**.
 
 
 <br/>
 ```Tcl
 pwio::coordGetLevel { coord }
 ```
-Returns an entity level value for the entity in coord.
+Returns an entity level value for the entity in the [grid coord][coord].
 <dl>
   <dt><code>coord</code></dt>
   <dd>The grid coord.</dd>
@@ -440,14 +451,14 @@ Returns an entity level value for the entity in coord.
 ```Tcl
 pwio::coordMapToEntity { fromCoord toEnt coordsVarName }
 ```
-Returns non-zero if fromCoord can be mapped to a grid coord in toEnt.
+Returns non-zero if `fromCoord` can be mapped to a [grid coord][coord] in `toEnt`.
 <dl>
   <dt><code>fromCoord</code></dt>
   <dd>The starting grid coord.</dd>
   <dt><code>toEnt</code></dt>
   <dd>The target grid entity.</dd>
   <dt><code>coordsVarName</code></dt>
-  <dd>Receives the list of mapped grid coords. Required.</dd>
+  <dd>Required. Receives the list of mapped grid coords.</dd>
 </dl>
 
 
@@ -455,32 +466,32 @@ Returns non-zero if fromCoord can be mapped to a grid coord in toEnt.
 ```Tcl
 pwio::coordMapToLevel { coord toLevel coordsVarName }
 ```
-Returns non-zero if coord can be mapped to a specific grid level.
+Returns non-zero if `coord` can be mapped to a specific grid level.
 <dl>
   <dt><code>coord</code></dt>
   <dd>The starting grid coord.</dd>
   <dt><code>toLevel</code></dt>
   <dd>The target grid level.</dd>
   <dt><code>coordsVarName</code></dt>
-  <dd>Receives the list of mapped grid coords. Required.</dd>
+  <dd>Required. Receives the list of mapped grid coords.</dd>
 </dl>
 
 
 # The Export Sequence
 
-Exporting a grid using `pwio` requires the same basic sequence:
+Exporting a grid using **pwio** requires the same basic sequence:
 
 * Call `pwio::beginIO` with a list of entites to export.
-    * A list of `pw::Domain` entites for a 2D export.
-    * A list of `pw::Block` entites for a 3D export.
-* Access the grid data using `pwio` and Glyph procs.
+    * A list of [pw::Domain][pwDomain] entites for a 2D export.
+    * A list of [pw::Block][pwBlock] entites for a 3D export.
+* Access the grid data using **pwio** and Glyph procs.
     * See the [Example Usage](#ExampleUsage) section.
     * See the [Pointwise Cannonical Order](#pointwise-cannonical-order) section.
 * Call `pwio::endIO` when finished.
 
 
 # Example Usage
-The following section show how to use `pwio` in conjuction with the standard Glyph calls.
+The following section show how to use **pwio** in conjuction with the standard Glyph calls.
 
 While many formats have a lot in common, each export format will have differing needs. The usage examples given below will not be needed by every exporter.
 
@@ -557,10 +568,10 @@ Things to consider:
 * When exporting 2D boundaries:
    * The `getCellCount` and `getCell` procs are **not** defined for `pw::Connector` entities.
    * The `pw::Connector` (linear) cells are defined as two consecutive local connector points *{0 1}, {1 2}*, etc.
-   * The local cell indices must be mapped to global `pwio` indices using `pwio::getCoordIndex`.
+   * The local cell indices must be mapped to global **pwio** indices using `pwio::getCoordIndex`.
 * When exporting 3D boundaries:
-   * The `getCellCount` and `getCell` procs **are** defined for `pw::Domain` entities.
-   * The `pw::Domain` boundary cells can be enumerated in a manner similar to the volume cells example.
+   * The `getCellCount` and `getCell` procs **are** defined for [pw::Domain][pwDomain] entities.
+   * The [pw::Domain][pwDomain] boundary cells can be enumerated in a manner similar to the volume cells example.
 
 
 ### Global Access
@@ -620,3 +631,15 @@ INFORMATION, OR ANY OTHER PECUNIARY LOSS) ARISING OUT OF THE USE OF OR
 INABILITY TO USE THESE SCRIPTS EVEN IF POINTWISE HAS BEEN ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGES AND REGARDLESS OF THE FAULT OR NEGLIGENCE OF
 POINTWISE.
+
+[coord]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GgGlyph-cxx.html#coord "What is a grid coord?"
+[point]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GgGlyph-cxx.html#point "What is a grid point?"
+[pwVolumeCondition]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphVolumeCondition-cxx.html "What is a volume condition?"
+[pwBoundaryCondition]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphBoundaryCondition-cxx.html "What is a boundary condition?"
+[pwNote]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphNote-cxx.html "What is a pw::Note?"
+[pwBlock]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphBlock-cxx.html "What is a pw::Block?"
+[pwDomain]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphDomain-cxx.html "What is a pw::Domain?"
+[pwConnector]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphConnector-cxx.html "What is a pw::Connector?"
+[pwNode]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphNode-cxx.html "What is a pw::Node?"
+[pwEdge]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphEdge-cxx.html "What is a pw::Edge?"
+[pwFace]: http://www.pointwise.com/glyph2/files/Glyph/cxx/GlyphFace-cxx.html "What is a pw::Face?"
