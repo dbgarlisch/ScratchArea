@@ -11,6 +11,7 @@ A collection of utility procs.
 * [Library Reference pwio::utils](#library-reference-pwioutils)
 * [Example Usage](#example-usage)
     * [Example 1](#example-1)
+    * [Example 2](#example-2)
 * [Disclaimer](#disclaimer)
 
 
@@ -115,7 +116,7 @@ Returns an list of `blk`'s face entities.
 
 The returned list contains [pw::Face][pwFace] entities.
 
-See [Example 2](example-2) for usage.
+For usage, see [Example 2](#example-2).
 
 
 <br/>
@@ -128,7 +129,7 @@ Returns `blk`'s domains as a list of [pw::Domain][pwDomain] entities. It is poss
   <dd>A block entity.</dd>
 </dl>
 
-See [Example 2](example-2) for usage.
+For usage, see [Example 2](#example-2).
 
 
 <br/>
@@ -141,7 +142,7 @@ Returns `face`'s domains as a list of [pw::Domain][pwDomain] entities. It is pos
   <dd>A face entity.</dd>
 </dl>
 
-See [Example 2](example-2) for usage.
+For usage, see [Example 2](#example-2).
 
 
 <br/>
@@ -154,7 +155,7 @@ Returns `face`'s edges as a list of [pw::Edge][pwEdge] entities. The first edge 
   <dd>A face entity.</dd>
 </dl>
 
-See [Example 2](example-2) for usage.
+For usage, see [Example 2](#example-2).
 
 
 <br/>
@@ -167,7 +168,7 @@ Returns `edge`'s connectors as a list of [pw::Connector][pwConnector] entities. 
   <dd>An edge entity.</dd>
 </dl>
 
-See [Example 2](example-2) for usage.
+For usage, see [Example 2](#example-2).
 
 
 <br/>
@@ -193,7 +194,7 @@ Returns the number of [grid points][point] on `ent`'s outer perimeter. This coun
 
 `ent` must be a [pw::Node][pwNode], [pw::Connector][pwConnector], [pw::Domain][pwDomain], [pw::Face][pwFace] or [pw::Block][pwBlock] entity.
 
-See [Example 2](example-2) for usage.
+For usage, see [Example 2](#example-2).
 
 
 <br/>
@@ -208,7 +209,7 @@ Returns the number of [grid points][point] on `ent`'s interior (non-perimeter po
 
 `ent` must be a [pw::Node][pwNode], [pw::Connector][pwConnector], [pw::Domain][pwDomain], [pw::Face][pwFace] or [pw::Block][pwBlock] entity.
 
-See [Example 2](example-2) for usage.
+For usage, see [Example 2](#example-2).
 
 
 <br/>
@@ -225,7 +226,7 @@ Returns **true** if `ent` lies on the boundary of `allEnts`.
 
 An error will occur if `ent` is anything other than a [pw::Connector][pwConnector] entity in 2D and anything other than a [pw::Domain][pwDomain] entity in 3D.
 
-See [Example 2](example-2) for usage.
+For usage, see [Example 2](#example-2).
 
 
 <br/>
@@ -253,7 +254,25 @@ Locks `ent`'s [grid points][point].
   <dd>A grid entity.</dd>
 </dl>
 
-A corresponding call to **pwio::utils::entUnlockInterior** must be made when finished.
+A corresponding call to **pwio::utils::entUnlockInterior** must be made when
+finished.
+
+Locking and unlocking entities is typically not needed in scripts using
+**pwio**. Locking and unlocking is already performed by **pwio::beginIO** and
+**pwio::endIO** respectively.
+
+Locking interior points improves I/O performance. A locked entity cannot be
+changed until it is unlocked. Consequently, Pointwise is able to skip
+potentially *expensive* data operations when accessing locked entities.
+Currently, only unrefined, structured blocks benefit from locking. However, more
+entity types may use locking in the future.
+
+**Usage:**
+```Tcl
+pwio::utils::entLockInterior $ent
+# do something with $ent
+pwio::utils::entUnlockInterior $ent
+```
 
 
 <br/>
@@ -268,7 +287,10 @@ Unlocks `ent`'s [grid points][point].
   <dd>If 1, all active locks on <code>ent</code> will be released.</dd>
 </dl>
 
-Typically, `clearAllLocks` should be 0. You should explicitly lock and unlock entities. There is a logic error if an entity remains locked at script termination.
+Under normal circumstances, `clearAllLocks` should be 0.
+
+For usage and more information about entity locking, see
+**pwio::utils::entLockInterior**.
 
 
 <br/>
@@ -287,6 +309,45 @@ This proc does **not** check if `ijk` lies within the given `ijkdim` extents. If
 
 The reverse mapping is done with **pwio::utils::indexToIjkStructured**.
 
+**Usage:**
+```Tcl
+package require PWI_Glyph 2.17.0
+source [file join [file dirname [info script]] ".." "pwio.glf"]
+
+proc doit { ijk ijkdim } {
+    # do a round-trip mapping from ijk to ndx and back to ijk
+    set ndx [pwio::utils::ijkToIndexStructured $ijk $ijkdim]
+    set ijk2 [pwio::utils::indexToIjkStructured $ndx $ijkdim]
+    puts [format "\{%s\} ::> %3s ::> \{%s\}" $ijk $ndx $ijk2]
+}
+
+# Define the ijkdim index space (indices 1..max)
+set ijkdim [list 5 4 3]
+lassign $ijkdim imax jmax kmax
+for {set k 1} {$k <= $kmax} {incr k} {
+    for {set j 1} {$j <= $jmax} {incr j} {
+        for {set i 1} {$i <= $imax} {incr i} {
+            doit [list $i $j $k] $ijkdim
+        }
+    }
+}
+# this will fail
+puts "bad ijk \{[list $i $j $k]\}"
+doit [list $i $j $k] $ijkdim
+
+# Output:
+# {1 1 1}  >    1  >  {1 1 1}
+# {2 1 1}  >    2  >  {2 1 1}
+# {3 1 1}  >    3  >  {3 1 1}
+#    ...SNIP...
+# {3 4 3}  >   58  >  {3 4 3}
+# {4 4 3}  >   59  >  {4 4 3}
+# {5 4 3}  >   60  >  {5 4 3}
+# bad ijk {6 5 4}
+# assert failed: (86 > 0 && 86 <= (5 * 4 * 3))
+# message      : indexToIjkStructured: Invalid ndx (86)
+```
+
 
 <br/>
 ```Tcl
@@ -301,6 +362,8 @@ Returns the ijk index corresponding to `ndx` within the given `ijkdim` extents.
 </dl>
 
 The reverse mapping is done with **pwio::utils::ijkToIndexStructured**.
+
+For usage, see **pwio::utils::ijkToIndexStructured**.
 
 
 <br/>
@@ -317,6 +380,63 @@ Returns `ent`'s linear index that corresponds to `ijk`.
 
 The reverse mapping is done with **pwio::utils::entIndexToIjk**.
 
+**Usage:**
+```Tcl
+package require PWI_Glyph 2.17.0
+source [file join [file dirname [info script]] ".." "pwio.glf"]
+
+proc doit { ijk ijkdim } {
+    # do a round-trip mapping from ijk to ndx and back to ijk
+    set ndx [ijkToIndexStructured $ijk $ijkdim]
+    set ijk2 [indexToIjkStructured $ndx $ijkdim]
+    puts [format "\{%s\} ::> %3s ::> \{%s\}" $ijk $ndx $ijk2]
+}
+
+if { ![getSelection Block blks errMsg] } {
+    puts $errMsg
+    exit 0
+}
+foreach blk $blks {
+    puts "--- [$blk getName] ---"
+    set ijkdim [$blk getDimensions]
+    lassign $ijkdim imax jmax kmax
+    for {set k 1} {$k <= $kmax} {incr k} {
+        for {set j 1} {$j <= $jmax} {incr j} {
+            for {set i 1} {$i <= $imax} {incr i} {
+                doit [list $i $j $k] $ijkdim
+            }
+        }
+    }
+    puts ""
+}
+# this will fail after last block
+puts "bad ijk \{[list $i $j $k]\}"
+doit [list $i $j $k] $ijkdim
+
+# Output:
+# --- blk-5 ---
+# {1 1 1} ::>   1 ::> {1 1 1}
+# {2 1 1} ::>   2 ::> {2 1 1}
+# {3 1 1} ::>   3 ::> {3 1 1}
+#    ...SNIP...
+# {1 4 3} ::>  34 ::> {1 4 3}
+# {2 4 3} ::>  35 ::> {2 4 3}
+# {3 4 3} ::>  36 ::> {3 4 3}
+#
+# --- blk-4 ---
+# {1 1 1} ::>   1 ::> {1 1 1}
+# {2 1 1} ::>   2 ::> {2 1 1}
+# {3 1 1} ::>   3 ::> {3 1 1}
+#    ...SNIP...
+# {1 4 3} ::>  34 ::> {1 4 3}
+# {2 4 3} ::>  35 ::> {2 4 3}
+# {3 4 3} ::>  36 ::> {3 4 3}
+#
+# bad ijk {4 5 4}
+# assert failed: (52 > 0 && 52 <= (3 * 4 * 3))
+# message      : indexToIjkStructured: Invalid ndx (52)
+```
+
 
 <br/>
 ```Tcl
@@ -332,6 +452,8 @@ Returns `ent`'s ijk index that corresponds to `ndx`.
 
 The reverse mapping is done with **pwio::utils::entIjkToIndex**.
 
+For usage, see **pwio::utils::entIjkToIndex**.
+
 
 <br/>
 ```Tcl
@@ -344,6 +466,15 @@ Returns a [grid coord][coord] for the given `ent` and `ijk`.
   <dt><code>ijk</code></dt>
   <dd>An ijk index list.</dd>
 </dl>
+
+**Usage:**
+```Tcl
+# $strBlk is a 5x5x5 structured block
+set sCoord [pwio::utils::makeCoord $strBlk {3 2 1}]
+
+# $unsBlk is a 128 point unstructured block
+set uCoord [pwio::utils::makeCoord $unsBlk {64 1 1}]
+```
 
 
 <br/>
@@ -358,6 +489,15 @@ Returns a [grid coord][coord] for the given `ent` and `i`, `j` and `k` index val
   <dd>The individual i, j and k index values.</dd>
 </dl>
 
+**Usage:**
+```Tcl
+# $strBlk is a 5x5x5 structured block
+set sCoord [pwio::utils::makeCoordFromIjkVals $strBlk 3 2 1]
+
+# $unsBlk is a 128 point unstructured block
+set uCoord [pwio::utils::makeCoordFromIjkVals $unsBlk 64 1 1]
+```
+
 
 <br/>
 ```Tcl
@@ -371,6 +511,15 @@ Returns a [grid coord][coord] for the given `ent` and linear index.
   <dd>A 1-based index relative to <code>ent</code>'s index space.</dd>
 </dl>
 
+**Usage:**
+```Tcl
+# $strBlk is a 5x5x5 structured block
+set sCoord [pwio::utils::makeCoordFromEntIndex $strBlk 8]
+
+# $unsBlk is a 128 point unstructured block
+set uCoord [pwio::utils::makeCoordFromEntIndex $unsBlk 64]
+```
+
 
 <br/>
 ```Tcl
@@ -383,6 +532,8 @@ Returns a list containing `ents` in base type sorted order.
 </dl>
 
 The returned list will be in **Block**, **Domain**, **Connector**, **Node** order.
+
+For usage, see [Example 1](#example-1).
 
 
 <br/>
@@ -414,6 +565,19 @@ Returns **true** if two xyz points are equal within the given tolerance.
   <dd>The optional comparison tolerance.</dd>
 </dl>
 
+**Usage:**
+```Tcl
+# default tolerance
+puts [pwio::utils::xyzEqual {1.0 2.0 3.0} {1.1 2.0 3.0}]
+
+# 0.2 tolerance
+puts [pwio::utils::xyzEqual {1.0 2.0 3.0} {1.1 2.0 3.0} 0.2]
+
+# Output:
+# 0
+# 1
+```
+
 
 <br/>
 ```Tcl
@@ -429,6 +593,19 @@ Returns **true** if two values are equal within the given tolerance.
   <dd>The optional comparison tolerance.</dd>
 </dl>
 
+**Usage:**
+```Tcl
+# default tolerance
+puts [pwio::utils::valEqual 1.0 1.1]
+
+# 0.2 tolerance
+puts [pwio::utils::valEqual 1.0 1.1 0.2]
+
+# Output:
+# 0
+# 1
+```
+
 
 <br/>
 ```Tcl
@@ -439,6 +616,16 @@ Returns a string representation of a [grid coord][coord].
   <dt><code>coord</code></dt>
   <dd>The grid coord.</dd>
 </dl>
+
+**Usage:**
+```Tcl
+# $unsBlk is a 128 point unstructured block
+set coord [pwio::utils::makeCoordFromEntIndex $unsBlk 64]
+puts [pwio::utils::coordToPtString $coord]
+
+# Output:
+# {64 1 1 ::pw::Blockunstructured_1}
+```
 
 
 <br/>
@@ -453,6 +640,16 @@ Returns a string representation of a [pw::VolumeCondition][pwVolumeCondition].
 
 The resulting string format will be *"vcName vcId vcPhysicalType"*
 
+**Usage:**
+```Tcl
+# "myVC" must exist
+set vc [pw::VolumeCondition getByName "myVC"]
+puts "'[pwio::utils::vcToString $vc]'"
+
+# Output:
+# 'myVC 3 Wall'
+```
+
 
 <br/>
 ```Tcl
@@ -465,6 +662,14 @@ Returns a [pw::Note][pwNote] entity positioned at `pt`.
   <dt><code>pt</code></dt>
   <dd>The note's position.</dd>
 </dl>
+
+This proc is primarily used for debugging.
+
+**Usage:**
+```Tcl
+pwio::utils::labelPt 3 {1.0 2.0 3.0}
+pwio::utils::labelPt "hello" {10.0 2.0 3.0}
+```
 
 
 <br/>
@@ -484,6 +689,8 @@ Dumps a table of information about `ents`.
 </dl>
 
 `allEnts` is ignored if `dim` is 0.
+
+For usage, see [Example 1](#example-1).
 
 
 <br/>
@@ -507,6 +714,8 @@ Only visible and enabled entities are considered for selection.
 If only 1 entity of the the given `selType` is selectable, it is returned **without** prompting the user.
 
 See also, **pwio::getSelectType**.
+
+For usage, see [Example 1](#example-1), [Example 2](#example-2), **pwio::utils::entBaseType**.
 
 
 <br/>
@@ -532,6 +741,8 @@ A [pw::Block][pwBlock]'s support entities are its defining [pw::Domain][pwDomain
 Only [pw::Domain][pwDomain]s, [pw::Connector][pwConnector]s and [pw::Node][pwNode]s can be support entities.
 
 Shared support entities are only included in `supEntsVarName` once.
+
+For usage, see [Example 1](#example-1).
 
 
 ## Example Usage
@@ -645,7 +856,7 @@ source [file join [file dirname [info script]] ".." "pwio.glf"]
 
 if { ![pwio::utils::getSelection Block blks errMsg] } {
     puts $errMsg
-    continue
+    exit 0
 }
 foreach blk $blks {
     set perimPtCnt [pwio::utils::getPerimeterPointCount $blk]
@@ -662,30 +873,26 @@ foreach blk $blks {
         }
         set perimPtCnt [pwio::utils::getPerimeterPointCount $dom]
         set ownedPtCnt [pwio::utils::getOwnedPointCount $dom]
-        puts "    [$dom getName]($dom) | perim $perimPtCnt | owned $ownedPtCnt | usage $domUsage"
+        puts "  BLOCK DOM [$dom getName]($dom) | perim $perimPtCnt | owned $ownedPtCnt | usage $domUsage"
     }
 
-    puts "BLOCK FACES"
     set faces [pwio::utils::getBlockFaces $blk]
     foreach face $faces {
         set perimPtCnt [pwio::utils::getPerimeterPointCount $face]
         set ownedPtCnt [pwio::utils::getOwnedPointCount $face]
-        puts "  FACE $face | perim $perimPtCnt | owned $ownedPtCnt"
-        puts "    FACE DOMAINS"
+        puts "  BLOCK FACE $face | perim $perimPtCnt | owned $ownedPtCnt"
         set doms [pwio::utils::getFaceDomains $face]
         foreach dom $doms {
-            puts "      DOM [$dom getName] ($dom)"
+            puts "    FACE DOM [$dom getName] ($dom)"
         }
-        puts "    FACE EDGES"
         set edges [pwio::utils::getFaceEdges $face]
         foreach edge $edges {
-            puts "      EDGE $edge"
-            puts "        EDGE CONNECTORS"
+            puts "    FACE EDGE $edge"
             set cons [pwio::utils::getEdgeConnectors $edge]
             foreach con $cons {
                 set perimPtCnt [pwio::utils::getPerimeterPointCount $con]
                 set ownedPtCnt [pwio::utils::getOwnedPointCount $con]
-                puts "          CON [$con getName] ($con) | perim $perimPtCnt | owned $ownedPtCnt"
+                puts "      EDGE CON [$con getName] ($con) | perim $perimPtCnt | owned $ownedPtCnt"
             }
         }
     }
@@ -693,6 +900,73 @@ foreach blk $blks {
 ```
 
 *Output:*
+
+    --------------------------------------------------------------------
+    BLOCK blk-5 (::pw::BlockStructured_2) | perim 34 | owned 2
+      BLOCK DOM dom-1(::pw::DomainStructured_47) | perim 10 | owned 2 | usage Connection
+      BLOCK DOM dom-29(::pw::DomainStructured_48) | perim 10 | owned 2 | usage Boundary
+      BLOCK DOM dom-23(::pw::DomainStructured_49) | perim 8 | owned 1 | usage Boundary
+      BLOCK DOM dom-25(::pw::DomainStructured_51) | perim 10 | owned 2 | usage Boundary
+      BLOCK DOM dom-27(::pw::DomainStructured_50) | perim 8 | owned 1 | usage Boundary
+      BLOCK DOM dom-20(::pw::DomainStructured_30) | perim 6 | owned 0 | usage Boundary
+      BLOCK DOM dom-21(::pw::DomainStructured_31) | perim 8 | owned 1 | usage Boundary
+      BLOCK FACE ::pw::FaceStructured_17 | perim 10 | owned 0
+        FACE DOM dom-1 (::pw::DomainStructured_47)
+        FACE EDGE ::pw::Edge_98
+          EDGE CON con-1 (::pw::Connector_194) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_99
+          EDGE CON con-51 (::pw::Connector_193) | perim 2 | owned 2
+        FACE EDGE ::pw::Edge_100
+          EDGE CON con-54 (::pw::Connector_196) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_101
+          EDGE CON con-57 (::pw::Connector_195) | perim 2 | owned 2
+
+    ...SNIP...
+
+      BLOCK FACE ::pw::FaceStructured_22 | perim 10 | owned 0
+        FACE DOM dom-20 (::pw::DomainStructured_30)
+        FACE DOM dom-21 (::pw::DomainStructured_31)
+        FACE EDGE ::pw::Edge_118
+          EDGE CON con-40 (::pw::Connector_158) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_119
+          EDGE CON con-45 (::pw::Connector_152) | perim 2 | owned 0
+          EDGE CON con-46 (::pw::Connector_157) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_120
+          EDGE CON con-41 (::pw::Connector_176) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_121
+          EDGE CON con-44 (::pw::Connector_148) | perim 2 | owned 1
+          EDGE CON con-43 (::pw::Connector_190) | perim 2 | owned 0
+    --------------------------------------------------------------------
+    BLOCK blk-4 (::pw::BlockStructured_1) | perim 34 | owned 2
+      BLOCK DOM dom-11(::pw::DomainStructured_25) | perim 10 | owned 2 | usage Boundary
+      BLOCK DOM dom-28(::pw::DomainStructured_26) | perim 10 | owned 2 | usage Boundary
+      BLOCK DOM dom-22(::pw::DomainStructured_27) | perim 8 | owned 1 | usage Boundary
+      BLOCK DOM dom-24(::pw::DomainStructured_28) | perim 10 | owned 2 | usage Boundary
+      BLOCK DOM dom-26(::pw::DomainStructured_29) | perim 8 | owned 1 | usage Boundary
+      BLOCK DOM dom-1(::pw::DomainStructured_47) | perim 10 | owned 2 | usage Connection
+      BLOCK FACE ::pw::FaceStructured_23 | perim 10 | owned 0
+        FACE DOM dom-11 (::pw::DomainStructured_25)
+        FACE EDGE ::pw::Edge_122
+          EDGE CON con-19 (::pw::Connector_174) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_123
+          EDGE CON con-26 (::pw::Connector_159) | perim 2 | owned 2
+        FACE EDGE ::pw::Edge_124
+          EDGE CON con-27 (::pw::Connector_163) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_125
+          EDGE CON con-28 (::pw::Connector_168) | perim 2 | owned 2
+
+    ...SNIP...
+
+      BLOCK FACE ::pw::FaceStructured_28 | perim 10 | owned 0
+        FACE DOM dom-1 (::pw::DomainStructured_47)
+        FACE EDGE ::pw::Edge_142
+          EDGE CON con-1 (::pw::Connector_194) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_143
+          EDGE CON con-51 (::pw::Connector_193) | perim 2 | owned 2
+        FACE EDGE ::pw::Edge_144
+          EDGE CON con-54 (::pw::Connector_196) | perim 2 | owned 1
+        FACE EDGE ::pw::Edge_145
+          EDGE CON con-57 (::pw::Connector_195) | perim 2 | owned 2
 
     --------------------------------------------------------------------
     BLOCK blk-5 (::pw::BlockStructured_2) | perim 34 | owned 2
