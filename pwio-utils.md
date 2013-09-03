@@ -385,10 +385,11 @@ The reverse mapping is done with **pwio::utils::entIndexToIjk**.
 package require PWI_Glyph 2.17.0
 source [file join [file dirname [info script]] ".." "pwio.glf"]
 
-proc doit { ijk ijkdim } {
+proc doit { blk ijk } {
+    set ijkdim [$blk getDimensions]
     # do a round-trip mapping from ijk to ndx and back to ijk
-    set ndx [ijkToIndexStructured $ijk $ijkdim]
-    set ijk2 [indexToIjkStructured $ndx $ijkdim]
+    set ndx [pwio::utils::entIjkToIndex $blk $ijk]
+    set ijk2 [pwio::utils::entIndexToIjk $blk $ndx]
     puts [format "\{%s\} ::> %3s ::> \{%s\}" $ijk $ndx $ijk2]
 }
 
@@ -397,24 +398,25 @@ if { ![getSelection Block blks errMsg] } {
     exit 0
 }
 foreach blk $blks {
-    puts "--- [$blk getName] ---"
+    puts "--- [$blk getName] ($blk) ---"
     set ijkdim [$blk getDimensions]
     lassign $ijkdim imax jmax kmax
     for {set k 1} {$k <= $kmax} {incr k} {
         for {set j 1} {$j <= $jmax} {incr j} {
             for {set i 1} {$i <= $imax} {incr i} {
-                doit [list $i $j $k] $ijkdim
+                doit $blk [list $i $j $k]
             }
         }
     }
     puts ""
 }
-# this will fail after last block
+
 puts "bad ijk \{[list $i $j $k]\}"
-doit [list $i $j $k] $ijkdim
+# This will throw a TCL Glyph error after last block
+doit $blk [list $i $j $k]
 
 # Output:
-# --- blk-5 ---
+# --- blk-5 (::pw::BlockStructured_2) ---
 # {1 1 1} ::>   1 ::> {1 1 1}
 # {2 1 1} ::>   2 ::> {2 1 1}
 # {3 1 1} ::>   3 ::> {3 1 1}
@@ -423,7 +425,7 @@ doit [list $i $j $k] $ijkdim
 # {2 4 3} ::>  35 ::> {2 4 3}
 # {3 4 3} ::>  36 ::> {3 4 3}
 #
-# --- blk-4 ---
+# --- blk-4 (::pw::BlockStructured_1) ---
 # {1 1 1} ::>   1 ::> {1 1 1}
 # {2 1 1} ::>   2 ::> {2 1 1}
 # {3 1 1} ::>   3 ::> {3 1 1}
@@ -433,8 +435,9 @@ doit [list $i $j $k] $ijkdim
 # {3 4 3} ::>  36 ::> {3 4 3}
 #
 # bad ijk {4 5 4}
-# assert failed: (52 > 0 && 52 <= (3 * 4 * 3))
-# message      : indexToIjkStructured: Invalid ndx (52)
+# ----- TCL TRACE -----
+# ERROR: value outside the range [(1,1,1),(3,4,3)]
+# ERROR: usage (argument 2): ::pw::BlockStructured_1 getLinearIndex ijk_index
 ```
 
 
@@ -967,101 +970,6 @@ foreach blk $blks {
           EDGE CON con-54 (::pw::Connector_196) | perim 2 | owned 1
         FACE EDGE ::pw::Edge_145
           EDGE CON con-57 (::pw::Connector_195) | perim 2 | owned 2
-
-    --------------------------------------------------------------------
-    BLOCK blk-5 (::pw::BlockStructured_2) | perim 34 | owned 2
-    BLOCK DOMAINS
-        dom-1(::pw::DomainStructured_47) | perim 10 | owned 2 | usage Connection
-        dom-29(::pw::DomainStructured_48) | perim 10 | owned 2 | usage Boundary
-        dom-23(::pw::DomainStructured_49) | perim 8 | owned 1 | usage Boundary
-        dom-25(::pw::DomainStructured_51) | perim 10 | owned 2 | usage Boundary
-        dom-27(::pw::DomainStructured_50) | perim 8 | owned 1 | usage Boundary
-        dom-20(::pw::DomainStructured_30) | perim 6 | owned 0 | usage Boundary
-        dom-21(::pw::DomainStructured_31) | perim 8 | owned 1 | usage Boundary
-    BLOCK FACES
-      FACE ::pw::FaceStructured_17 | perim 10 | owned 0
-        FACE DOMAINS
-          DOM dom-1 (::pw::DomainStructured_47)
-        FACE EDGES
-          EDGE ::pw::Edge_98
-            EDGE CONNECTORS
-              CON con-1 (::pw::Connector_194) | perim 2 | owned 1
-          EDGE ::pw::Edge_99
-            EDGE CONNECTORS
-              CON con-51 (::pw::Connector_193) | perim 2 | owned 2
-          EDGE ::pw::Edge_100
-            EDGE CONNECTORS
-              CON con-54 (::pw::Connector_196) | perim 2 | owned 1
-          EDGE ::pw::Edge_101
-            EDGE CONNECTORS
-              CON con-57 (::pw::Connector_195) | perim 2 | owned 2
-
-                            ...SNIP...
-
-      FACE ::pw::FaceStructured_22 | perim 10 | owned 0
-        FACE DOMAINS
-          DOM dom-20 (::pw::DomainStructured_30)
-          DOM dom-21 (::pw::DomainStructured_31)
-        FACE EDGES
-          EDGE ::pw::Edge_118
-            EDGE CONNECTORS
-              CON con-40 (::pw::Connector_158) | perim 2 | owned 1
-          EDGE ::pw::Edge_119
-            EDGE CONNECTORS
-              CON con-45 (::pw::Connector_152) | perim 2 | owned 0
-              CON con-46 (::pw::Connector_157) | perim 2 | owned 1
-          EDGE ::pw::Edge_120
-            EDGE CONNECTORS
-              CON con-41 (::pw::Connector_176) | perim 2 | owned 1
-          EDGE ::pw::Edge_121
-            EDGE CONNECTORS
-              CON con-44 (::pw::Connector_148) | perim 2 | owned 1
-              CON con-43 (::pw::Connector_190) | perim 2 | owned 0
-    --------------------------------------------------------------------
-    BLOCK blk-4 (::pw::BlockStructured_1) | perim 34 | owned 2
-    BLOCK DOMAINS
-        dom-11(::pw::DomainStructured_25) | perim 10 | owned 2 | usage Boundary
-        dom-28(::pw::DomainStructured_26) | perim 10 | owned 2 | usage Boundary
-        dom-22(::pw::DomainStructured_27) | perim 8 | owned 1 | usage Boundary
-        dom-24(::pw::DomainStructured_28) | perim 10 | owned 2 | usage Boundary
-        dom-26(::pw::DomainStructured_29) | perim 8 | owned 1 | usage Boundary
-        dom-1(::pw::DomainStructured_47) | perim 10 | owned 2 | usage Connection
-    BLOCK FACES
-      FACE ::pw::FaceStructured_23 | perim 10 | owned 0
-        FACE DOMAINS
-          DOM dom-11 (::pw::DomainStructured_25)
-        FACE EDGES
-          EDGE ::pw::Edge_122
-            EDGE CONNECTORS
-              CON con-19 (::pw::Connector_174) | perim 2 | owned 1
-          EDGE ::pw::Edge_123
-            EDGE CONNECTORS
-              CON con-26 (::pw::Connector_159) | perim 2 | owned 2
-          EDGE ::pw::Edge_124
-            EDGE CONNECTORS
-              CON con-27 (::pw::Connector_163) | perim 2 | owned 1
-          EDGE ::pw::Edge_125
-            EDGE CONNECTORS
-              CON con-28 (::pw::Connector_168) | perim 2 | owned 2
-
-                            ...SNIP...
-
-      FACE ::pw::FaceStructured_28 | perim 10 | owned 0
-        FACE DOMAINS
-          DOM dom-1 (::pw::DomainStructured_47)
-        FACE EDGES
-          EDGE ::pw::Edge_142
-            EDGE CONNECTORS
-              CON con-1 (::pw::Connector_194) | perim 2 | owned 1
-          EDGE ::pw::Edge_143
-            EDGE CONNECTORS
-              CON con-51 (::pw::Connector_193) | perim 2 | owned 2
-          EDGE ::pw::Edge_144
-            EDGE CONNECTORS
-              CON con-54 (::pw::Connector_196) | perim 2 | owned 1
-          EDGE ::pw::Edge_145
-            EDGE CONNECTORS
-              CON con-57 (::pw::Connector_195) | perim 2 | owned 2
 
 
 ### Disclaimer
