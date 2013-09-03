@@ -750,11 +750,12 @@ For usage, see [Example 1](#example-1).
 
 ## Example Usage
 
-The output for these examples was generated from the grid file `example.pw`.
+The output for these examples was generated from the grid file [example.pw][2].
 
 ![The example grid][1]
 
 [1]: https://raw.github.com/dbgarlisch/ScratchArea/master/GridModel.png  "The example grid"
+[2]: https://raw.github.com/dbgarlisch/ScratchArea/master/test/example.pw  "The example grid file"
 
 
 ### Example 1
