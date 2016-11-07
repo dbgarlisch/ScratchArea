@@ -11,67 +11,52 @@ $dbPt delete
 catch {$dbPt isConstrained} msg
 puts "dbPt isConstrained == $msg"
 
+
 puts "\n##########################################################"
-namespace eval RangeInt {
-  variable cnt_ 0 ;# used to create unique object names
+# Using non-object oriented RangeInt from Part 2
+source "RangeInt-ensemble.tcl"
 
-  namespace export create
-  proc create { {val 0} {min inf} {max inf} } {
-    set ns [namespace current]
-    # Build unique object name == "${ns}::_N"
-    set objName "${ns}::_[incr ${ns}::cnt_]"
-    # Create the object command ensemble
-    eval "namespace eval $objName \$${ns}::proto_"
-    # Init the object - error if $val is out of range
-    ${objName}::ctor $min $max $val
-    return $objName
-  }
-  namespace ensemble create ;# create the RangeInt ensemble
-
-  #----------------------------------------------------------
-  # RangeInt object ensembles support these subcommands
-  variable proto_ {
-    variable min_   inf  ;# object's range min
-    variable max_   inf  ;# object's range max
-    variable val_   0    ;# object's current value
-
-    # constructor - NOT EXPORTED
-    proc ctor { min max val } {
-      variable min_ $min
-      variable max_ $max
-      [namespace current]::set $val ;# error if out of range
-    }
-
-    # helper - NOT EXPORTED
-    proc check { val op limit } {
-      return [expr [list "$limit" == "inf" || $val $op $limit]]
-    }
-
-    namespace export set
-    proc set { val } {
-      variable min_
-      variable max_
-      if { [check $val >= $min_] && [check $val <= $max_] } {
-        variable val_ $val
-        return $val_
-      }
-      return -code error "Invalid value: $min_ <= $val <= $max_"
-    }
-
-    namespace export get
-    proc get {} {
-      variable val_
-      return $val_
-    }
-
-    namespace export delete
-    proc delete {} {
-      namespace delete [namespace current]
-    }
-
-    namespace ensemble create ;# create the object ensemble
-  } ;# end proto_
+proc calcProgress { cnt total name } {
+  RangeInt set $name [expr {int(100.0 * $cnt / $total)}]
 }
+
+RangeInt add percent 0 0 100
+calcProgress 12 200 percent
+puts "percent: 12 / 200 == [RangeInt get percent]%"
+
+# Output
+# percent: 12 / 200 == 6%
+
+namespace delete RangeInt
+
+
+puts "\n##########################################################"
+# If we had an object oriented RangeInt
+source "RangeInt-oo.tcl"
+
+proc calcProgressObj { cnt total obj } {
+  $obj set [expr {int(100.0 * $cnt / $total)}]
+}
+
+set percent [RangeInt create 0 0 100]
+#puts "=============== exps:  [namespace eval ${percent} {namespace export}]"
+calcProgressObj 12 200 $percent
+puts "percent: 12 / 200 == [$percent get]%"
+$percent delete
+
+# This works if $other supports "set N" and "get"
+#set other [OtherType create]
+set other [RangeInt create 0 0 100]
+calcProgressObj 20 400 $other
+puts "  other: 20 / 400 == [$other get]%"
+$other delete
+
+# Output
+# percent: 12 / 200 == 6%
+#   other: 20 / 400 == 5%
+
+
+puts "\n##########################################################"
 
 # Usage
 set vA [RangeInt create 22 -5 25] ;# range -5 ... 25
